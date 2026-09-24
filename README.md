@@ -1,6 +1,8 @@
-# Musfira Jamil - Learning Notes
+# Technical Notes
 
-A curated library of technical notes and primers spanning genomics, Databricks, software engineering, statistics, and laboratory techniques. These materials are written for students, researchers, and practitioners who want clear, practical explanations they can revisit while building analyses and pipelines.
+**Live handbook:** [https://musfira992.github.io/notes/](https://musfira992.github.io/notes/)
+
+A browsable handbook of technical notes and primers spanning genomics, Databricks, software engineering, statistics, and laboratory techniques. The published site is a Pandoc HTML build with a table of contents and readable typography. The Markdown sources in this repository remain the source of truth.
 
 ## Who this is for
 
@@ -15,13 +17,24 @@ These notes are by [Musfira Jamil](https://www.musfirajamil.com). Explore more w
 
 ## Origin
 
-Content in this repository originated as **Primers** on [musfirajamil.com](https://www.musfirajamil.com/primers). Each note here is a Markdown migration of that material so the library can be browsed on GitHub or published with GitBook-style tooling.
+Content in this repository originated as **Primers** on [musfirajamil.com](https://www.musfirajamil.com/primers). Each note here is a Markdown migration of that material so the library can be browsed as a handbook site, on GitHub, or with GitBook-style tooling.
 
 ## How to browse
 
+- **Handbook website (recommended):** [https://musfira992.github.io/notes/](https://musfira992.github.io/notes/) - single-page handbook with TOC, categories, and all notes rendered to HTML.
 - **On GitHub:** open files under `notes/` from the table of contents below.
 - **With GitBook:** this repo includes a `SUMMARY.md` sidebar table of contents. Point GitBook (or compatible docs tooling) at the repository root.
-- **Live site:** interactive widgets (for example the DNA sequence tutorial) remain available at https://www.musfirajamil.com/primers.
+- **Interactive widgets:** some tutorials (for example the DNA sequence primer) keep interactive widgets on https://www.musfirajamil.com/primers.
+
+## Rebuild the handbook
+
+Requires [Pandoc](https://pandoc.org/). From the repository root:
+
+```bash
+./scripts/build-handbook.sh
+```
+
+This regenerates `docs/index.html`, `docs/styles.css`, and `docs/.nojekyll` from `SUMMARY.md` order and the Markdown files under `notes/`. GitHub Pages serves the site from the `/docs` folder on `main`.
 
 ## Table of contents
 
@@ -71,6 +84,12 @@ Content in this repository originated as **Primers** on [musfirajamil.com](https
 ```
 README.md
 SUMMARY.md
+book.json
+scripts/build-handbook.sh
+docs/                 # GitHub Pages site (Pandoc HTML)
+  index.html
+  styles.css
+  .nojekyll
 notes/
   interactive-tutorials/
   genomics/
