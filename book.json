@@ -1,0 +1,11 @@
+{
+  "title": "Musfira Jamil - Learning Notes",
+  "description": "Technical notes and primers across genomics, Databricks, software engineering, statistics, and lab techniques.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}
