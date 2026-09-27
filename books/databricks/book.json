@@ -1,0 +1,12 @@
+{
+  "title": "Databricks",
+  "subtitle": "SQL, Spark, pipelines, and lakehouse patterns",
+  "description": "Notes on SQL, Spark, pipelines, dimensional modelling, analytics queries, and Chemprop for drug discovery on Databricks.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}

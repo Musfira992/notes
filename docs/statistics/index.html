@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Musfira Jamil" />
+  <meta name="dcterms.date" content="2026-09-27" />
+  <title>Statistics</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Statistics</h1>
+<p class="subtitle">Exploratory analysis and data visualisation</p>
+<p class="author">Musfira Jamil</p>
+<p class="date">2026-09-27</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#the-art-of-data-visualisation"
+id="toc-the-art-of-data-visualisation">The Art of Data Visualisation</a>
+<ul>
+<li><a href="#begin-with-the-question"
+id="toc-begin-with-the-question">Begin with the question</a></li>
+<li><a href="#choose-encodings-that-match-the-data"
+id="toc-choose-encodings-that-match-the-data">Choose encodings that
+match the data</a></li>
+<li><a href="#respect-statistical-honesty"
+id="toc-respect-statistical-honesty">Respect statistical
+honesty</a></li>
+<li><a href="#reduce-clutter-keep-context"
+id="toc-reduce-clutter-keep-context">Reduce clutter; keep
+context</a></li>
+<li><a href="#colour-with-care" id="toc-colour-with-care">Colour with
+care</a></li>
+<li><a href="#small-multiples-beat-overloaded-panels"
+id="toc-small-multiples-beat-overloaded-panels">Small multiples beat
+overloaded panels</a></li>
+<li><a href="#tables-are-visualisations-too"
+id="toc-tables-are-visualisations-too">Tables are visualisations
+too</a></li>
+<li><a href="#iterate-with-an-audience-in-mind"
+id="toc-iterate-with-an-audience-in-mind">Iterate with an audience in
+mind</a></li>
+<li><a href="#closing" id="toc-closing">Closing</a></li>
+</ul></li>
+<li><a href="#exploratory-data-analysis"
+id="toc-exploratory-data-analysis">Exploratory Data Analysis</a>
+<ul>
+<li><a href="#what-eda-is-for" id="toc-what-eda-is-for">What EDA is
+for</a></li>
+<li><a href="#a-practical-sequence" id="toc-a-practical-sequence">A
+practical sequence</a></li>
+<li><a href="#start-with-metadata-alignment"
+id="toc-start-with-metadata-alignment">Start with metadata
+alignment</a></li>
+<li><a href="#distributions-before-means"
+id="toc-distributions-before-means">Distributions before means</a></li>
+<li><a href="#missing-data-is-a-pattern-not-a-nuisance"
+id="toc-missing-data-is-a-pattern-not-a-nuisance">Missing data is a
+pattern, not a nuisance</a></li>
+<li><a href="#relationship-views-with-humility"
+id="toc-relationship-views-with-humility">Relationship views with
+humility</a></li>
+<li><a href="#high-dimensional-structure"
+id="toc-high-dimensional-structure">High-dimensional structure</a></li>
+<li><a href="#keep-a-running-log" id="toc-keep-a-running-log">Keep a
+running log</a></li>
+<li><a href="#time-box-exploration"
+id="toc-time-box-exploration">Time-box exploration</a></li>
+<li><a href="#closing-1" id="toc-closing-1">Closing</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>Primers on exploratory data analysis and the craft of data
+visualisation.</p>
+<p>These chapters started as learning notes and primers.</p>
+<p><a href="../index.html" class="handbook-link">Notes library</a></p>
+<h1 id="the-art-of-data-visualisation">The Art of Data
+Visualisation</h1>
+<p><em>Visualisation as disciplined communication: choose honest
+encodings, reduce clutter, use colour carefully, and let the analytical
+question drive the chart.</em></p>
+<p>Data visualisation is where analysis meets understanding. A clear
+chart can surface a batch effect, a cohort imbalance, or a surprising
+biological pattern in seconds; a confusing chart can hide the same
+signal for weeks. The “art” is not decoration, it is disciplined
+communication.</p>
+<p>This primer focuses on practical choices for analysts working across
+bioinformatics and general data work, using Australian English spelling
+throughout: we are talking about <strong>visualisation</strong>.</p>
+<h2 id="begin-with-the-question">Begin with the question</h2>
+<p>Every figure should answer a question a reader actually has.
+Examples:</p>
+<ul>
+<li>Do treatment and control separate on global expression space?</li>
+<li>Which categories dominate the total, and by how much?</li>
+<li>How does a metric change over time or across batches?</li>
+</ul>
+<p>If you cannot state the question in one sentence, pause before
+opening a plotting library. Visualisation without a question becomes
+gallery art, pleasant, not persuasive.</p>
+<h2 id="choose-encodings-that-match-the-data">Choose encodings that
+match the data</h2>
+<ul>
+<li><strong>Position</strong> along a common scale is the most accurate
+perceptual channel, prefer scatter and position-based comparisons when
+precision matters.</li>
+<li><strong>Length</strong> (bars) works well for categorical
+magnitudes.</li>
+<li><strong>Colour</strong> is excellent for categories or coarse
+gradients, poor for reading precise values.</li>
+<li><strong>Area and angle</strong> (pies, poorly designed bubbles) are
+easy to misread, use sparingly.</li>
+</ul>
+<p>Match chart type to structure: distributions (histograms, ECDFs,
+violin/box with care), relationships (scatter), compositions (stacked
+bars or clear tables), and change (line charts with honest
+baselines).</p>
+<h2 id="respect-statistical-honesty">Respect statistical honesty</h2>
+<p>Start axes at zero for bar charts of magnitudes. For line charts of
+change, truncated axes can be legitimate, but label them clearly. Show
+uncertainty when you have it (intervals, bootstrap bands) instead of
+implying false precision. Avoid dual axes that invite false alignment
+stories.</p>
+<p>In omics QC, plot raw diagnostics before fancy summaries: library
+sizes, gene detection rates, PCA coloured by batch <em>and</em>
+biological labels. The boring plot often prevents the wrong
+conclusion.</p>
+<h2 id="reduce-clutter-keep-context">Reduce clutter; keep context</h2>
+<p>Remove chartjunk, heavy gridlines, 3D effects, ornamental legends.
+Keep what aids reading: units, sample sizes, and the definition of each
+series. Direct labels often beat a distant legend when there are few
+categories.</p>
+<pre><code>import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.scatter(
+ df[&quot;pc1&quot;],
+ df[&quot;pc2&quot;],
+ c=df[&quot;batch&quot;].astype(&quot;category&quot;).cat.codes,
+ alpha=0.8,
+)
+ax.set_xlabel(&quot;PC1&quot;)
+ax.set_ylabel(&quot;PC2&quot;)
+ax.set_title(&quot;PCA coloured by sequencing batch&quot;)
+fig.tight_layout()</code></pre>
+<p>Prefer an explicit colour map and legend in figures you share, the
+sketch above is about structure, not a finished graphic.</p>
+<h2 id="colour-with-care">Colour with care</h2>
+<p>Use colourblind-safe palettes for anything shared widely. Reserve
+strong colours for the series that matter; grey out the rest. In
+heatmaps, diverging scales need a meaningful midpoint (often zero for
+centred values). Never rely on colour alone when print or projectors may
+flatten the story, reinforce with shape or facets.</p>
+<h2 id="small-multiples-beat-overloaded-panels">Small multiples beat
+overloaded panels</h2>
+<p>When you have several related views (per-chromosome, per-assay,
+per-site), facet them. Humans compare aligned small charts better than
+one chart with eight overlapping encodings. Consistency of scale across
+facets is a feature, not a limitation.</p>
+<h2 id="tables-are-visualisations-too">Tables are visualisations
+too</h2>
+<p>Sometimes the best “plot” is a tidy table with sorted rows, clear
+units, and a handful of well-chosen summary columns. Dashboards that
+force every metric into a sparkline often make comparison harder, not
+easier.</p>
+<h2 id="iterate-with-an-audience-in-mind">Iterate with an audience in
+mind</h2>
+<ol type="1">
+<li>Draft for yourself, explore freely.</li>
+<li>Edit for a colleague, remove jargon and ambiguous legends.</li>
+<li>Polish for stakeholders, state the takeaway in the title or
+caption.</li>
+</ol>
+<p>Captions should say what to notice, not merely repeat axis labels.
+“PC1 separates library prep batches more than genotype” is a caption;
+“PCA plot” is a missed opportunity.</p>
+<h2 id="closing">Closing</h2>
+<p>Great visualisation is empathy plus accuracy: you encode data so
+another person can see what you saw, or politely disagree with evidence
+in view. Master a small set of honest chart forms, label generously, and
+let the question drive the design. The art follows from that craft.</p>
+<h1 id="exploratory-data-analysis">Exploratory Data Analysis</h1>
+<p><em>A practical EDA sequence for analysts and bioinformaticians,
+inventory, quality, distributions, relationships, high-dimensional
+structure, and documented decisions.</em></p>
+<p>Exploratory data analysis (EDA) is the disciplined habit of looking
+before you model. In bioinformatics and applied analytics, EDA is how
+you discover batch effects, mislabelled samples, skewed distributions,
+and the shape of relationships that should inform, or forbid, a
+particular method. Skipping it is how elegant models fail on contact
+with reality.</p>
+<h2 id="what-eda-is-for">What EDA is for</h2>
+<p>EDA answers questions like:</p>
+<ul>
+<li>What is in this dataset, at what grain, and how complete is it?</li>
+<li>Where are outliers, missingness patterns, and impossible
+values?</li>
+<li>Which variables dominate variation, and are they biological or
+technical?</li>
+<li>Are groups balanced enough for the comparison we want?</li>
+</ul>
+<p>It is not a substitute for confirmatory analysis. It is the map you
+draw so confirmatory work asks fair questions.</p>
+<h2 id="a-practical-sequence">A practical sequence</h2>
+<ol type="1">
+<li><strong>Inventory</strong>, dimensions, types, primary keys,
+joinability to metadata.</li>
+<li><strong>Quality</strong>, missingness, duplicates, range checks,
+unit sanity.</li>
+<li><strong>Univariate views</strong>, distributions of key
+measures.</li>
+<li><strong>Relationships</strong>, pairwise plots, correlations with
+caveats, stratified summaries.</li>
+<li><strong>Structure</strong>, PCA/MDS or clustering for
+high-dimensional assays; contingency views for categorical designs.</li>
+<li><strong>Notes</strong>, write down surprises while they are
+fresh.</li>
+</ol>
+<h2 id="start-with-metadata-alignment">Start with metadata
+alignment</h2>
+<p>Before plotting expression or sensor streams, confirm that every
+measurement column matches a metadata row. Check ID formats, rename
+maps, and one-to-one expectations. Many “biological” PCA separations are
+actually swapped labels or mixed genome builds.</p>
+<pre><code>assert set(counts.columns) == set(meta[&quot;sample_id&quot;])
+meta = meta.set_index(&quot;sample_id&quot;).loc[counts.columns]</code></pre>
+<p>Assertions like these are EDA infrastructure, cheap and
+invaluable.</p>
+<h2 id="distributions-before-means">Distributions before means</h2>
+<p>Summary tables hide multimodality. Plot library sizes, gene-wise
+detection rates, ages, doses, or whatever drives your domain. Ask
+whether a log transform is needed, whether zeros are structural, and
+whether a few samples dominate totals.</p>
+<p>For counts data, mean-variance trends and filter effects deserve a
+look before differential testing. For tabular business or field data,
+histograms and ECDFs often beat a single KPI tile.</p>
+<h2 id="missing-data-is-a-pattern-not-a-nuisance">Missing data is a
+pattern, not a nuisance</h2>
+<p>Plot missingness by column and by row. Is it random, block-wise (an
+assay failed), or informative (not measured below a limit)? The
+mechanism changes whether imputation, exclusion, or explicit “missing”
+categories are appropriate. Do not silently drop rows in a pipeline
+without recording how many disappeared and why.</p>
+<h2 id="relationship-views-with-humility">Relationship views with
+humility</h2>
+<p>Scatterplots, box plots by group, and simple correlation matrices are
+useful, and easy to over-interpret. Correlation is not causation;
+confounding is common in observational biological and agricultural data.
+Use EDA to generate hypotheses and to spot confounders (batch, site,
+depth, age) that belong in later models.</p>
+<h2 id="high-dimensional-structure">High-dimensional structure</h2>
+<p>For omics matrices, PCA or similar embeddings coloured by technical
+and biological factors are standard EDA. Look at scree plots: if early
+components track plate or prep date more than condition, address that
+before celebrating a volcano plot. Complementary views, hierarchical
+clustering of samples, QC metric overlays, help confirm the story.</p>
+<pre><code># Sketch: standardise and compute PCA on a feature matrix X
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+X_std = StandardScaler().fit_transform(X)
+pcs = PCA(n_components=10).fit_transform(X_std)</code></pre>
+<h2 id="keep-a-running-log">Keep a running log</h2>
+<p>EDA that lives only in scrollback is wasted. Keep a short markdown or
+notebook section: filters applied, samples removed, oddities pending
+follow-up. That log becomes methods text and protects you when a result
+needs auditing.</p>
+<h2 id="time-box-exploration">Time-box exploration</h2>
+<p>EDA can expand forever. Set a goal (“decide whether batch correction
+is needed”, “confirm cohort eligibility”) and a time box. When the goal
+is met, write the decision and move to confirmatory analysis. You can
+always return with a sharper question.</p>
+<h2 id="closing-1">Closing</h2>
+<p>Good EDA is curious, sceptical, and documented. It privileges plots
+and checks that could change your mind. Build a repeatable personal
+checklist for each new dataset, inventory, quality, distributions,
+relationships, structure, notes, and you will catch more truth earlier,
+with fewer heroic debugging sessions later.</p>
+</body>
+</html>

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Musfira Jamil" />
+  <meta name="dcterms.date" content="2026-09-27" />
+  <title>Software Engineering for Bioinformatics</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Software Engineering for Bioinformatics</h1>
+<p class="subtitle">Engineering habits for trustworthy scientific
+software</p>
+<p class="author">Musfira Jamil</p>
+<p class="date">2026-09-27</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#on-building-reliable-data-products"
+id="toc-on-building-reliable-data-products">On Building Reliable Data
+Products</a>
+<ul>
+<li><a href="#what-a-data-product-actually-is"
+id="toc-what-a-data-product-actually-is">What a data product actually
+is</a></li>
+<li><a href="#start-with-contracts-not-code"
+id="toc-start-with-contracts-not-code">Start with contracts, not
+code</a></li>
+<li><a href="#make-quality-checks-first-class"
+id="toc-make-quality-checks-first-class">Make quality checks
+first-class</a></li>
+<li><a href="#design-for-reprocessing"
+id="toc-design-for-reprocessing">Design for reprocessing</a></li>
+<li><a href="#observability-without-theatre"
+id="toc-observability-without-theatre">Observability without
+theatre</a></li>
+<li><a href="#communicate-limitations-honestly"
+id="toc-communicate-limitations-honestly">Communicate limitations
+honestly</a></li>
+<li><a href="#a-simple-checklist-before-you-ship"
+id="toc-a-simple-checklist-before-you-ship">A simple checklist before
+you ship</a></li>
+</ul></li>
+<li><a href="#tips-for-writing-maintainable-python-code"
+id="toc-tips-for-writing-maintainable-python-code">Tips for Writing
+Maintainable Python Code</a>
+<ul>
+<li><a href="#prefer-clarity-over-cleverness"
+id="toc-prefer-clarity-over-cleverness">Prefer clarity over
+cleverness</a></li>
+<li><a href="#structure-projects-early"
+id="toc-structure-projects-early">Structure projects early</a></li>
+<li><a href="#dependencies-are-part-of-the-science"
+id="toc-dependencies-are-part-of-the-science">Dependencies are part of
+the science</a></li>
+<li><a href="#type-hints-and-small-interfaces"
+id="toc-type-hints-and-small-interfaces">Type hints and small
+interfaces</a></li>
+<li><a href="#handle-paths-and-configuration-deliberately"
+id="toc-handle-paths-and-configuration-deliberately">Handle paths and
+configuration deliberately</a></li>
+<li><a href="#test-the-risky-bits" id="toc-test-the-risky-bits">Test the
+risky bits</a></li>
+<li><a href="#style-tools-are-cheap-insurance"
+id="toc-style-tools-are-cheap-insurance">Style tools are cheap
+insurance</a></li>
+<li><a href="#a-practical-baseline" id="toc-a-practical-baseline">A
+practical baseline</a></li>
+</ul></li>
+<li><a href="#common-unix-commands" id="toc-common-unix-commands">Common
+UNIX Commands</a>
+<ul>
+<li><a href="#moving-around-and-seeing-what-is-there"
+id="toc-moving-around-and-seeing-what-is-there">Moving around and seeing
+what is there</a></li>
+<li><a href="#peeking-at-files-safely"
+id="toc-peeking-at-files-safely">Peeking at files safely</a></li>
+<li><a href="#finding-things" id="toc-finding-things">Finding
+things</a></li>
+<li><a href="#compression-and-archives"
+id="toc-compression-and-archives">Compression and archives</a></li>
+<li><a href="#pipes-redirects-and-composition"
+id="toc-pipes-redirects-and-composition">Pipes, redirects, and
+composition</a></li>
+<li><a href="#columns-and-quick-tabular-surgery"
+id="toc-columns-and-quick-tabular-surgery">Columns and quick tabular
+surgery</a></li>
+<li><a href="#permissions-processes-and-disk"
+id="toc-permissions-processes-and-disk">Permissions, processes, and
+disk</a></li>
+<li><a href="#remote-and-transfer-basics"
+id="toc-remote-and-transfer-basics">Remote and transfer basics</a></li>
+<li><a href="#shell-hygiene-that-saves-weekends"
+id="toc-shell-hygiene-that-saves-weekends">Shell hygiene that saves
+weekends</a></li>
+<li><a href="#closing-thought" id="toc-closing-thought">Closing
+thought</a></li>
+</ul></li>
+<li><a href="#git-essentials" id="toc-git-essentials">Git Essentials</a>
+<ul>
+<li><a href="#why-git-matters-in-scientific-data-work"
+id="toc-why-git-matters-in-scientific-data-work">Why Git matters in
+scientific data work</a></li>
+<li><a href="#the-daily-loop" id="toc-the-daily-loop">The daily
+loop</a></li>
+<li><a href="#clone-branch-merge" id="toc-clone-branch-merge">Clone,
+branch, merge</a></li>
+<li><a href="#write-commits-for-humans"
+id="toc-write-commits-for-humans">Write commits for humans</a></li>
+<li><a href="#inspect-history-without-fear"
+id="toc-inspect-history-without-fear">Inspect history without
+fear</a></li>
+<li><a href="#undo-safely" id="toc-undo-safely">Undo safely</a></li>
+<li><a href="#gitignore-for-analysis-repos"
+id="toc-gitignore-for-analysis-repos">.gitignore for analysis
+repos</a></li>
+<li><a href="#collaboration-basics"
+id="toc-collaboration-basics">Collaboration basics</a></li>
+<li><a href="#a-minimal-mental-model" id="toc-a-minimal-mental-model">A
+minimal mental model</a></li>
+</ul></li>
+<li><a href="#hello-julia" id="toc-hello-julia">Hello Julia</a></li>
+<li><a
+href="#software-engineering-concepts-every-bioinformatics-professional-should-know"
+id="toc-software-engineering-concepts-every-bioinformatics-professional-should-know">Software
+Engineering Concepts Every Bioinformatics Professional Should Know</a>
+<ul>
+<li><a href="#modularity-and-separation-of-concerns"
+id="toc-modularity-and-separation-of-concerns">Modularity and separation
+of concerns</a></li>
+<li><a href="#reproducibility-as-a-design-goal"
+id="toc-reproducibility-as-a-design-goal">Reproducibility as a design
+goal</a></li>
+<li><a href="#testing-is-not-optional-for-critical-paths"
+id="toc-testing-is-not-optional-for-critical-paths">Testing is not
+optional for critical paths</a></li>
+<li><a href="#version-control-and-code-review"
+id="toc-version-control-and-code-review">Version control and code
+review</a></li>
+<li><a href="#configuration-over-hard-coding"
+id="toc-configuration-over-hard-coding">Configuration over
+hard-coding</a></li>
+<li><a href="#logging-errors-and-observability"
+id="toc-logging-errors-and-observability">Logging, errors, and
+observability</a></li>
+<li><a href="#data-contracts-and-metadata-discipline"
+id="toc-data-contracts-and-metadata-discipline">Data contracts and
+metadata discipline</a></li>
+<li><a href="#performance-measure-before-you-rewrite"
+id="toc-performance-measure-before-you-rewrite">Performance: measure
+before you rewrite</a></li>
+<li><a href="#workflow-managers" id="toc-workflow-managers">Workflow
+managers</a></li>
+<li><a href="#ethics-and-stewardship"
+id="toc-ethics-and-stewardship">Ethics and stewardship</a></li>
+<li><a href="#start-where-you-are" id="toc-start-where-you-are">Start
+where you are</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>Practical notes on Git, UNIX, maintainable Python, Julia, reliable
+data products, and the engineering ideas that keep bioinformatics work
+reproducible.</p>
+<p>These chapters started as learning notes and primers.</p>
+<p><a href="../index.html" class="handbook-link">Notes library</a></p>
+<h1 id="on-building-reliable-data-products">On Building Reliable Data
+Products</h1>
+<p><em>Reliable data products are more than pipelines that succeed, they
+need clear consumers, contracts, quality gates, and a rebuild path. A
+practical primer from a data analysis and bioinformatics lens.</em></p>
+<p>Reliable data products are not just pipelines that finish without
+errors. They are artefacts that stakeholders can trust on Monday
+morning, tables, dashboards, feature stores, and analysis-ready datasets
+whose meaning, freshness, and lineage are clear. In bioinformatics and
+broader data engineering work, that trust is earned through deliberate
+design, not luck.</p>
+<p>This primer shares a practical framing I use when building data
+products: treat reliability as a product property, not a last-mile ops
+concern.</p>
+<h2 id="what-a-data-product-actually-is">What a data product actually
+is</h2>
+<p>A data product has a defined consumer, a contract, and a lifecycle.
+The consumer might be a wet-lab collaborator reading a differential
+expression table, a downstream ML job, or a clinical operations
+dashboard. The contract covers schema, grain, update cadence, and known
+limitations. The lifecycle covers ownership, versioning, and
+retirement.</p>
+<p>If you cannot name the consumer and the contract in a few sentences,
+you probably have a pipeline, not yet a product.</p>
+<h2 id="start-with-contracts-not-code">Start with contracts, not
+code</h2>
+<p>Before writing transforms, write down:</p>
+<ul>
+<li><strong>Grain</strong>, one row per what? Sample? Gene-sample pair?
+Patient-visit?</li>
+<li><strong>Keys</strong>, which columns uniquely identify a row, and
+how do they join to other datasets?</li>
+<li><strong>Freshness</strong>, how stale can the data be before it is
+harmful?</li>
+<li><strong>Null behaviour</strong>, when is a missing value informative
+versus a bug?</li>
+<li><strong>Units and ontology</strong>, gene IDs, assay versions,
+timezones, currency of metadata.</li>
+</ul>
+<p>These decisions prevent the classic failure mode where two teams
+build slightly different “truth” tables and argue in meetings instead of
+analysing data.</p>
+<h2 id="make-quality-checks-first-class">Make quality checks
+first-class</h2>
+<p>Reliability means detecting broken assumptions early. Prefer small,
+readable checks over elaborate frameworks at the start:</p>
+<ul>
+<li>Row counts within expected bounds after each major step.</li>
+<li>Primary-key uniqueness and foreign-key coverage.</li>
+<li>Distribution checks on critical numeric fields (library size, QC
+metrics, yield).</li>
+<li>Schema drift detection when upstream files change column names or
+types.</li>
+</ul>
+<p>In practice, a handful of assertions in your orchestration layer (or
+a simple validation script) catches most silent corruption before it
+reaches a notebook.</p>
+<h2 id="design-for-reprocessing">Design for reprocessing</h2>
+<p>Experiments get re-run. Metadata gets corrected. A reliable product
+can be rebuilt from raw inputs without archaeology. That usually
+means:</p>
+<ol type="1">
+<li>Immutable raw landing zones (never overwrite source extracts).</li>
+<li>Deterministic transforms with pinned package versions where
+scientific results matter.</li>
+<li>Clear separation of <em>raw</em>, <em>cleaned</em>, and
+<em>serving</em> layers.</li>
+<li>Run identifiers so you can answer “which code produced this
+table?”.</li>
+</ol>
+<p>Reproducibility is not only a publication requirement, it is how you
+sleep when someone asks for last quarter’s cohort definition again.</p>
+<h2 id="observability-without-theatre">Observability without
+theatre</h2>
+<p>You do not need a wall of red-green panels on day one. You do need
+answers to three questions when something fails:</p>
+<ul>
+<li>What broke (step, table, check)?</li>
+<li>Who is affected (which consumers)?</li>
+<li>What is the recovery path (rerun, backfill, or temporary
+freeze)?</li>
+</ul>
+<p>Log structured run metadata. Alert on consumer-facing freshness and
+failed quality checks first; refine later.</p>
+<h2 id="communicate-limitations-honestly">Communicate limitations
+honestly</h2>
+<p>Every dataset has blind spots, batch effects, missing covariates,
+delayed labels. Document them next to the product, not in a private
+Slack thread. A short README with known issues often prevents more harm
+than another chart.</p>
+<h2 id="a-simple-checklist-before-you-ship">A simple checklist before
+you ship</h2>
+<ul>
+<li>Consumer and use case named.</li>
+<li>Schema and grain written down.</li>
+<li>At least one automated quality gate.</li>
+<li>Rebuild path tested once end-to-end.</li>
+<li>Owner and escalation path clear.</li>
+</ul>
+<p>Reliable data products grow from this discipline. The tooling will
+change; the product mindset will not. Build for the person who has to
+trust your table under time pressure, that is usually the best design
+constraint you can pick.</p>
+<h1 id="tips-for-writing-maintainable-python-code">Tips for Writing
+Maintainable Python Code</h1>
+<p><em>Practical habits for readable, reusable Python in analysis and
+bioinformatics, project layout, pinned environments, small tests, and
+clarity over cleverness.</em></p>
+<p>Maintainable Python is less about cleverness and more about kindness
+to your future self, and to whoever inherits your analysis next quarter.
+In data analysis and bioinformatics, scripts often start as exploratory
+notebooks and quietly become production. A few habits keep that
+transition from becoming painful.</p>
+<h2 id="prefer-clarity-over-cleverness">Prefer clarity over
+cleverness</h2>
+<p>Readable code wins. Use descriptive names
+(<code>filtered_counts</code> over <code>df2</code>), keep functions
+short enough to skim, and avoid nesting that needs a map to parse. If a
+line needs a comment to explain <em>what</em> it does, rewrite the line.
+Reserve comments for <em>why</em>, the scientific rationale, the quirk
+in an upstream file, the reason a threshold exists.</p>
+<pre><code>def filter_low_counts(counts, min_cpm=1.0, min_samples=3):
+ &quot;&quot;&quot;Keep genes with CPM above threshold in enough samples.&quot;&quot;&quot;
+ cpm = counts.div(counts.sum(axis=0), axis=1) * 1e6
+ keep = (cpm &gt; min_cpm).sum(axis=1) &gt;= min_samples
+ return counts.loc[keep]</code></pre>
+<p>The docstring and names already carry most of the story.</p>
+<h2 id="structure-projects-early">Structure projects early</h2>
+<p>Even small analyses benefit from a predictable layout:</p>
+<ul>
+<li><code>data/raw</code> and <code>data/processed</code> (never
+overwrite raw).</li>
+<li><code>src/</code> for reusable functions.</li>
+<li><code>notebooks/</code> for exploration only.</li>
+<li><code>scripts/</code> or <code>pipelines/</code> for runnable entry
+points.</li>
+<li><code>tests/</code> for the bits that must not silently drift.</li>
+</ul>
+<p>Move logic out of notebooks into modules as soon as you find yourself
+copying cells between projects. Notebooks are wonderful for thinking;
+modules are better for repeating.</p>
+<h2 id="dependencies-are-part-of-the-science">Dependencies are part of
+the science</h2>
+<p>Pin versions for anything that can change numerical results,
+<code>numpy</code>, <code>pandas</code>, Bioconductor bridges, plotting
+stacks. Record the environment with <code>requirements.txt</code>,
+<code>environment.yml</code>, or a lock file. In collaborative
+bioinformatics work, “it worked on my machine” is not a methodology
+section.</p>
+<pre><code>python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</code></pre>
+<h2 id="type-hints-and-small-interfaces">Type hints and small
+interfaces</h2>
+<p>You do not need heavyweight typing everywhere. A few annotations on
+public functions make IDEs and reviewers more effective:</p>
+<pre><code>from pathlib import Path
+import pandas as pd
+
+def load_sample_sheet(path: Path) -&gt; pd.DataFrame:
+ return pd.read_csv(path, dtype={&quot;sample_id&quot;: &quot;string&quot;})</code></pre>
+<p>Keep function signatures boring: explicit inputs, explicit outputs,
+minimal hidden global state.</p>
+<h2 id="handle-paths-and-configuration-deliberately">Handle paths and
+configuration deliberately</h2>
+<p>Hard-coded absolute paths break the moment someone else clones the
+repo. Prefer project-relative paths, environment variables for secrets
+and machine-specific roots, and a single config module or YAML file for
+analysis parameters (thresholds, genome build, output directories).</p>
+<h2 id="test-the-risky-bits">Test the risky bits</h2>
+<p>You do not need 100% coverage. Test joins that drop rows, ID mapping,
+date parsing, and any custom statistic you would be embarrassed to get
+wrong. A tiny <code>pytest</code> suite on those functions pays for
+itself the first time a metadata column changes type.</p>
+<pre><code>def test_filter_low_counts_keeps_expressed_genes():
+ counts = make_toy_counts()
+ out = filter_low_counts(counts, min_cpm=1.0, min_samples=2)
+ assert &quot;highly_expressed_gene&quot; in out.index</code></pre>
+<h2 id="style-tools-are-cheap-insurance">Style tools are cheap
+insurance</h2>
+<p>Use a formatter (<code>ruff format</code> or <code>black</code>), a
+linter (<code>ruff</code>), and consistent import ordering. Agree once
+as a team and stop debating whitespace. Consistency lowers cognitive
+load when reviewing scientific code.</p>
+<h2 id="a-practical-baseline">A practical baseline</h2>
+<ol type="1">
+<li>Name things for the domain, not the intermediate step number.</li>
+<li>Separate exploration from reusable logic.</li>
+<li>Pin dependencies that affect results.</li>
+<li>Test irreversible or subtle transforms.</li>
+<li>Document assumptions next to the code that encodes them.</li>
+</ol>
+<p>Maintainable Python is a habit, not a rewrite project. Apply these
+practices incrementally, each cleaned function and pinned environment
+makes the next analysis safer and faster.</p>
+<h1 id="common-unix-commands">Common UNIX Commands</h1>
+<p><em>A compact UNIX toolkit for analysts and bioinformaticians,
+inspecting large files, composing pipes, compression, search, and
+everyday shell hygiene.</em></p>
+<p>UNIX command-line tools remain the fastest way to inspect files, glue
+workflows together, and survive large bioinformatics datasets without
+opening a GUI. You do not need to memorise everything, a compact toolkit
+covers most day-to-day work for analysts and data engineers.</p>
+<p>This primer focuses on commands I reach for constantly when exploring
+sequencing outputs, logs, and tabular intermediates.</p>
+<h2 id="moving-around-and-seeing-what-is-there">Moving around and seeing
+what is there</h2>
+<pre><code>pwd
+ls -lah
+cd /path/to/project
+tree -L 2 # if installed</code></pre>
+<p><code>ls -lah</code> shows hidden files, human-readable sizes, and
+permissions. Permissions matter when shared cluster directories refuse
+to write.</p>
+<h2 id="peeking-at-files-safely">Peeking at files safely</h2>
+<p>Never open a multi-gigabyte FASTQ in a graphical editor. Use
+streaming viewers:</p>
+<pre><code>head -n 20 sample.fastq
+tail -n 50 run.log
+less big_matrix.tsv
+wc -l counts.csv</code></pre>
+<p><code>less</code> lets you search with <code>/</code> and quit with
+<code>q</code>. <code>wc -l</code> is a quick sanity check after
+filters.</p>
+<h2 id="finding-things">Finding things</h2>
+<pre><code>find data/raw -name &quot;*.fastq.gz&quot;
+grep -n &quot;ERROR&quot; logs/pipeline.log
+rg &quot;sample_id&quot; metadata/ # ripgrep, if available</code></pre>
+<p><code>find</code> locates files by name or pattern;
+<code>grep</code>/<code>rg</code> locate text inside files. Prefer
+ripgrep on large codebases, it is fast and respects ignore rules.</p>
+<h2 id="compression-and-archives">Compression and archives</h2>
+<p>Omics data lives compressed. Essential patterns:</p>
+<pre><code>gzip file.txt
+gunzip file.txt.gz
+zcat sample.fastq.gz | head
+tar -xzf archive.tar.gz
+tar -czf backup.tar.gz results/</code></pre>
+<p><code>zcat</code> (or <code>gzip -dc</code>) streams compressed text
+without writing an uncompressed copy to disk, invaluable on clusters
+with tight quotas.</p>
+<h2 id="pipes-redirects-and-composition">Pipes, redirects, and
+composition</h2>
+<p>The UNIX philosophy shines when you chain small tools:</p>
+<pre><code>zcat reads.fastq.gz | head -n 400 | grep &quot;^@&quot; | wc -l
+cut -f1,3 counts.tsv | sort | uniq -c | sort -nr | head</code></pre>
+<p>Stdout of one command feeds stdin of the next. Redirect with
+<code>&gt;</code> (overwrite) or <code>&gt;&gt;</code> (append); send
+errors aside with <code>2&gt;</code> when needed.</p>
+<h2 id="columns-and-quick-tabular-surgery">Columns and quick tabular
+surgery</h2>
+<pre><code>cut -d&#39;,&#39; -f1,4 samples.csv
+awk -F&#39;\t&#39; &#39;NR==1 || $3 &gt; 10&#39; genes.tsv
+sort -k2,2nr results.tsv | head</code></pre>
+<p><code>cut</code> selects fields; <code>awk</code> filters and
+transforms; <code>sort</code> orders. For serious tabular work you will
+still use Python or R, but these one-liners are perfect for smoke
+tests.</p>
+<h2 id="permissions-processes-and-disk">Permissions, processes, and
+disk</h2>
+<pre><code>chmod u+x run.sh
+df -h
+du -sh data/*
+top
+htop # if installed
+kill PID</code></pre>
+<p>Know when a job is CPU-bound versus waiting on disk. <code>du</code>
+finds which directory ate the quota before someone else’s job fails.</p>
+<h2 id="remote-and-transfer-basics">Remote and transfer basics</h2>
+<pre><code>ssh user@cluster
+scp local.file user@cluster:/path/
+rsync -avP data/ user@cluster:/path/data/</code></pre>
+<p><code>rsync</code> is usually kinder than <code>scp</code> for large
+directories, it resumes and shows progress.</p>
+<h2 id="shell-hygiene-that-saves-weekends">Shell hygiene that saves
+weekends</h2>
+<ul>
+<li>Quote variables: <code>"$file"</code>, spaces in filenames are
+common.</li>
+<li>Stop on failure in scripts: <code>set -euo pipefail</code>.</li>
+<li>Prefer absolute paths in scheduled jobs.</li>
+<li>Keep a short personal cheatsheet of the ten commands you actually
+use.</li>
+</ul>
+<h2 id="closing-thought">Closing thought</h2>
+<p>UNIX fluency is a force multiplier for data work. Learn the small set
+above deeply, composition, compression, inspection, and search, and you
+will spend less time fighting files and more time analysing them.
+Everything else can be looked up as needed.</p>
+<h1 id="git-essentials">Git Essentials</h1>
+<p><em>The Git daily loop for scientific and data work, status, diff,
+commit, branch, and safe undo, without drowning in advanced history
+surgery.</em></p>
+<p>Git is the shared memory of a software or analysis project. For data
+analysts and bioinformaticians, it is how you recover yesterday’s
+working script, review a colleague’s change to a pipeline, and explain
+exactly which code produced a figure. You do not need every advanced
+command, a solid essentials kit covers most real work.</p>
+<h2 id="why-git-matters-in-scientific-data-work">Why Git matters in
+scientific data work</h2>
+<p>Analyses evolve. Parameters change. Reviewers ask for a tweak six
+months later. Git gives you a chronological story of those decisions.
+Pair it with clear commits and you can reconstruct not only
+<em>what</em> changed, but often <em>why</em>.</p>
+<p>Keep large raw data out of Git. Version the code, configs, and small
+metadata; store bulky omics files in appropriate data stores and record
+accessions or checksums in the repo.</p>
+<h2 id="the-daily-loop">The daily loop</h2>
+<pre><code>git status
+git diff
+git add path/to/file
+git commit -m &quot;Describe why this change exists&quot;
+git push</code></pre>
+<p><code>status</code> and <code>diff</code> are your habits before
+every commit. Read the diff. Accidental notebook outputs and credentials
+show up there more often than anyone likes to admit.</p>
+<h2 id="clone-branch-merge">Clone, branch, merge</h2>
+<pre><code>git clone git@example.com:org/project.git
+git checkout -b feature/qc-filters
+# ... edit ...
+git add -p
+git commit -m &quot;Tighten CPM filter for low-depth libraries&quot;
+git checkout main
+git pull
+git merge feature/qc-filters</code></pre>
+<p>Branches let you try ideas without breaking <code>main</code>. Name
+them for intent (<code>fix/sample-sheet-join</code>,
+<code>docs/readme-setup</code>). Prefer small branches that are easy to
+review.</p>
+<h2 id="write-commits-for-humans">Write commits for humans</h2>
+<p>A good commit message completes the sentence “This commit will…”.
+Focus on motivation:</p>
+<ul>
+<li>Good: <em>Exclude control wells from normalisation cohort</em></li>
+<li>Weak: <em>Update script</em></li>
+</ul>
+<p>Atomic commits, one logical change each, make reverts and archaeology
+easier.</p>
+<h2 id="inspect-history-without-fear">Inspect history without fear</h2>
+<pre><code>git log --oneline -n 20
+git log -p -- path/to/file
+git blame path/to/file
+git show COMMIT</code></pre>
+<p><code>blame</code> is not about blame, it answers “when did this line
+arrive?”. Combined with <code>log -p</code>, it is the fastest way to
+understand surprising behaviour in a shared pipeline.</p>
+<h2 id="undo-safely">Undo safely</h2>
+<p>Common, relatively safe moves:</p>
+<pre><code>git restore file.py # discard unstaged edits to a file
+git restore --staged file.py # unstage
+git revert COMMIT # add a new commit that undoes a past one
+git reset --soft HEAD~1 # undo last commit, keep changes staged</code></pre>
+<p>Avoid rewriting published history on shared branches
+(<code>reset --hard</code>, force-push) unless the team explicitly
+agrees. Prefer <code>revert</code> for changes already on
+<code>main</code>.</p>
+<h2 id="gitignore-for-analysis-repos">.gitignore for analysis repos</h2>
+<p>Ignore the noise: virtualenvs, <code>__pycache__</code>, large
+intermediates, local secrets, and notebook checkpoint folders. Commit an
+example env file (<code>.env.example</code>) instead of real
+credentials. Never commit API keys or private key files, rotate
+immediately if you slip.</p>
+<pre><code>.venv/
+__pycache__/
+data/raw/
+*.h5ad
+.env
+.ipynb_checkpoints/</code></pre>
+<h2 id="collaboration-basics">Collaboration basics</h2>
+<ul>
+<li>Pull before you push.</li>
+<li>Use pull requests for anything non-trivial, review is part of
+quality control.</li>
+<li>Resolve conflicts calmly: understand both sides, do not simply
+accept theirs or yours blindly.</li>
+<li>Tag releases when a pipeline version underpins a paper or production
+dashboard (<code>v1.2.0</code>).</li>
+</ul>
+<h2 id="a-minimal-mental-model">A minimal mental model</h2>
+<ol type="1">
+<li>Working tree, your files now.</li>
+<li>Staging area, what the next commit will include.</li>
+<li>Repository history, commits on branches.</li>
+<li>Remote, the shared copy on the server.</li>
+</ol>
+<p>Master moving changes deliberately between those layers and Git stops
+feeling mystical. Essentials first; rebases and advanced history surgery
+can wait until the daily loop is second nature.</p>
+<h1 id="hello-julia">Hello Julia</h1>
+<p><em>A quick tour of the Julia programming language, its performance
+story, its scientific-computing ecosystem, and how to get started with
+Pluto notebooks.</em></p>
+<p>Experts are saying Julia “looks like Python, feels like Lisp, runs
+like Fortran.” That made me curious, so I decided to explore more. Here
+is a summary of what I found.</p>
+<p>Julia is a general-purpose, interpreted language developed by a group
+at MIT, with numerical computing at the core of its design. It was first
+released in 2012 and slowly matured to a point where version 1.0 was
+launched in 2018 (currently at v1.7). At its core, Julia is a
+high-level, dynamic programming language that offers performance
+approaching that of statically-typed languages like C++, and is
+increasingly being used by a huge number of universities and tech
+companies.</p>
+<ul>
+<li><strong>Performance</strong>: Julia, just like Python, is a dynamic
+language with optional types. In Python types can change at run-time,
+costing an overhead as compared to C, which is statically typed.
+However, Julia uses multiple dispatch, which makes defining types
+optional, so defining types doesn’t lead to that performance boost.</li>
+</ul>
+<p>Some bragging rights highlighted by MIT at the v1.0 launch:</p>
+<blockquote>
+<p>Julia is the only high-level dynamic programming language in the
+“petaflop club,” having achieved 1.5 petaflop/s using 1.3 million
+threads, 650,000 cores and 9,300 Knights Landing (KNL) nodes to
+catalogue 188 million stars, galaxies, and other astronomical objects in
+14.6 minutes on the world’s sixth-most powerful supercomputer.</p>
+</blockquote>
+<blockquote>
+<p>“The release of Julia 1.0 signals that Julia is now ready to change
+the technical world by combining the high-level productivity and ease of
+use of Python and R with the lightning-fast speed of C++,” Edelman
+says.</p>
+</blockquote>
+<p><strong>Rich data science and visualisation libraries:</strong> From
+a data science perspective, anyone who is already pushing the boundaries
+of Python and is interested in high-performance numerical computing
+should definitely give Julia a try. Developing high-performance
+libraries focusing on scientific computing and numerical computation has
+been prioritised since day one. This means Julia solves the “two
+language problem,” letting you quickly convert prototypes into
+high-performance implementations without the extra overhead of shifting
+between two different languages. It is quite similar to Python
+syntactically, plus you can use all your existing Python libraries in
+it. You can also call C and Fortran libraries natively.</p>
+<p><strong>Try Julia for data science:</strong> How to get started? MIT
+has made available a free online course called Introduction to
+Computational Thinking to help you get started with fundamental concepts
+of programming with Julia. In addition, the official YouTube channel of
+Julia is a treasure trove of discussions on advanced topics such as
+dynamic type systems, parametric polymorphism/multiple dispatch,
+Lisp-like macros, distributed computing, garbage collection, and
+libraries for floating point calculations.</p>
+<p>I would also recommend installing Pluto, an interactive-computing
+environment (reactive notebook) for Julia with intelligent syntax
+analysis. It also comes with an important guarantee: “At any instant,
+the program state is completely described by the code you see.” That
+makes it more promising than using Jupyter notebooks or MATLAB. Lastly,
+this cheatsheet will come in handy: <a
+href="https://github.com/mitmath/julia-mit/blob/master/Julia-cheatsheet.pdf">github.com/mitmath/julia-mit</a></p>
+<h1
+id="software-engineering-concepts-every-bioinformatics-professional-should-know">Software
+Engineering Concepts Every Bioinformatics Professional Should Know</h1>
+<p><em>Modularity, reproducibility, testing, configuration, and
+workflows, the software engineering ideas that keep bioinformatics
+analyses trustworthy and reusable.</em></p>
+<p>Bioinformatics sits at the intersection of biology and software. The
+biology may be your passion, but the software engineering habits you
+bring to scripts, pipelines, and shared tools largely decide whether
+results are trustworthy and reusable. You do not need to become a
+full-time software engineer, you do need a few durable concepts.</p>
+<h2 id="modularity-and-separation-of-concerns">Modularity and separation
+of concerns</h2>
+<p>Split work into stages with clear inputs and outputs: ingest, QC,
+transform, analyse, report. Each stage should be runnable on its own
+with documented artefacts. When QC is tangled inside differential
+expression code, every change risks breaking both.</p>
+<p>In practice, modularity looks like small functions or workflow steps,
+stable intermediate files or tables, and interfaces that do not leak
+temporary assumptions.</p>
+<h2 id="reproducibility-as-a-design-goal">Reproducibility as a design
+goal</h2>
+<p>A result you cannot regenerate is an anecdote. Aim for:</p>
+<ul>
+<li>Pinned software environments (Conda, containers, or lock
+files).</li>
+<li>Recorded parameters and random seeds where stochastic methods
+appear.</li>
+<li>Referenced data versions (GEO accessions, genome builds, container
+digests).</li>
+<li>Runnable entry points, a script or workflow a colleague can launch
+without a guided tour.</li>
+</ul>
+<pre><code># Example: record the stack beside results
+python -m pip freeze &gt; results/run_2026-09-06/requirements.lock</code></pre>
+<p>Containers (Docker/Singularity) are especially helpful on shared HPCs
+where “module load” combinations drift over time.</p>
+<h2 id="testing-is-not-optional-for-critical-paths">Testing is not
+optional for critical paths</h2>
+<p>Scientific code fails quietly, joins drop samples, gene ID maps
+collide, strandedness flips. Add automated checks where mistakes are
+costly:</p>
+<ul>
+<li>Unit tests for ID mapping and filter logic.</li>
+<li>Smoke tests that run a tiny fixture dataset through the
+pipeline.</li>
+<li>Schema checks on outputs (columns, types, allowed values).</li>
+</ul>
+<p>Even a handful of tests around sample-sheet parsing will save days
+over a project’s life.</p>
+<h2 id="version-control-and-code-review">Version control and code
+review</h2>
+<p>Use Git for code and configuration. Review changes that affect
+analysis logic the same way you would review a methods paragraph,
+because they <em>are</em> methods. Pull requests create a paper trail of
+design decisions that notebooks alone rarely capture.</p>
+<h2 id="configuration-over-hard-coding">Configuration over
+hard-coding</h2>
+<p>Thresholds, reference paths, and cohort definitions change. Put them
+in config files or explicit parameters rather than burying magic numbers
+in deep functions. Your future self will need to rerun sensitivity
+analyses; make that a one-line edit, not a scavenger hunt.</p>
+<pre><code># config.yaml
+min_cpm: 1.0
+min_samples: 3
+genome_build: GRCh38
+strandedness: reverse</code></pre>
+<h2 id="logging-errors-and-observability">Logging, errors, and
+observability</h2>
+<p>Fail loudly with useful messages. Capture run IDs, input hashes, and
+key counts at each stage. When a collaborator says “the heatmap looks
+wrong”, logs that show how many genes survived filtering are worth more
+than a vague stack trace.</p>
+<h2 id="data-contracts-and-metadata-discipline">Data contracts and
+metadata discipline</h2>
+<p>Agree on sample identifiers, ontology for conditions, and units.
+Treat metadata as part of the product: inconsistent labels cause more
+incorrect biology papers than exotic statistical choices. Validate early
+that every assay file has a matching metadata row.</p>
+<h2 id="performance-measure-before-you-rewrite">Performance: measure
+before you rewrite</h2>
+<p>Bioinformatics datasets can be large, but premature optimisation
+wastes time. Profile when something is slow. Prefer efficient formats
+(Parquet, indexed BAM/CRAM) and vectorised operations before rewriting
+algorithms. Parallelise embarrassingly parallel sample-level steps with
+workflow managers rather than ad-hoc background jobs.</p>
+<h2 id="workflow-managers">Workflow managers</h2>
+<p>Tools like Snakemake, Nextflow, or CWL encode dependencies between
+steps so rebuilds are incremental and transparent. They also make
+cluster submission less fragile than a nest of shell scripts. Learn one
+well enough to express a linear pipeline cleanly, that skill
+transfers.</p>
+<h2 id="ethics-and-stewardship">Ethics and stewardship</h2>
+<p>Access controls, de-identification, and data retention are software
+concerns too. Keep secrets out of repos. Know which datasets are
+shareable under which licences. Engineering discipline includes
+protecting participants and collaborators, not only shipping plots.</p>
+<h2 id="start-where-you-are">Start where you are</h2>
+<ol type="1">
+<li>Put analysis code in Git with a clear README.</li>
+<li>Pin the environment for any result you might publish or
+operationalise.</li>
+<li>Add tests around the transforms you fear.</li>
+<li>Externalise parameters.</li>
+<li>Automate the happy path with a workflow or scripted entry
+point.</li>
+</ol>
+<p>Software engineering concepts are amplifiers for biological insight.
+Adopt them gradually, with empathy for scientific iteration, and your
+pipelines will stay trustworthy as questions get harder.</p>
+</body>
+</html>

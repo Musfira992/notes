@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Musfira Jamil" />
+  <meta name="dcterms.date" content="2026-09-27" />
+  <title>Genomics</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Genomics</h1>
+<p class="subtitle">Reading DNA and interpreting sequence models</p>
+<p class="author">Musfira Jamil</p>
+<p class="date">2026-09-27</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#reading-a-dna-sequence"
+id="toc-reading-a-dna-sequence">Reading a DNA Sequence</a>
+<ul>
+<li><a href="#the-double-helix-as-text"
+id="toc-the-double-helix-as-text">The double helix, as text</a></li>
+<li><a href="#reading-frames" id="toc-reading-frames">Reading
+frames</a></li>
+<li><a href="#sequence-composition"
+id="toc-sequence-composition">Sequence composition</a></li>
+<li><a href="#whats-next" id="toc-whats-next">What’s next</a></li>
+</ul></li>
+<li><a href="#deepexplainer-on-simulated-genomic-data-deeplift"
+id="toc-deepexplainer-on-simulated-genomic-data-deeplift">DeepExplainer
+on Simulated Genomic Data (DeepLIFT)</a>
+<ul>
+<li><a href="#why-sequence-models-need-explanation"
+id="toc-why-sequence-models-need-explanation">Why sequence models need
+explanation</a></li>
+<li><a href="#deeplift-in-plain-language"
+id="toc-deeplift-in-plain-language">DeepLIFT in plain language</a></li>
+<li><a href="#deepexplainer-and-simulated-data"
+id="toc-deepexplainer-and-simulated-data">DeepExplainer and simulated
+data</a></li>
+<li><a href="#practical-cautions" id="toc-practical-cautions">Practical
+cautions</a></li>
+<li><a href="#takeaway" id="toc-takeaway">Takeaway</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>Primers on reading a DNA sequence, and on interpreting genomic
+sequence models with DeepLIFT and DeepExplainer.</p>
+<p>These chapters started as learning notes and primers.</p>
+<p><a href="../index.html" class="handbook-link">Notes library</a></p>
+<h1 id="reading-a-dna-sequence">Reading a DNA Sequence</h1>
+<p>DNA is written in an alphabet of just four letters -
+<strong>A</strong>, <strong>T</strong>, <strong>G</strong>, and
+<strong>C</strong> - representing the nucleotides adenine, thymine,
+guanine, and cytosine. Everything from a protein’s shape to a crop’s
+nitrogen-use efficiency is ultimately encoded in long strings of these
+four characters.</p>
+<p><em>Interactive widget on the live site: <code>DnaHelix</code>
+(example sequence <code>ATGGCATTACGTGACTTCGGC</code>). See
+https://www.musfirajamil.com/primers/reading-a-dna-sequence.</em></p>
+<h2 id="the-double-helix-as-text">The double helix, as text</h2>
+<p>The two strands of DNA are <strong>complementary</strong>: A always
+pairs with T, and G always pairs with C. Given one strand, you can
+always reconstruct the other - try editing the sequence below and hover
+any base to see its partner.</p>
+<p><em>Interactive widget on the live site: <code>SequenceViewer</code>
+(example sequence <code>ATGGCATTACGT</code>). See
+https://www.musfirajamil.com/primers/reading-a-dna-sequence.</em></p>
+<h2 id="reading-frames">Reading frames</h2>
+<p>Ribosomes read DNA (via messenger RNA) three letters at a time. Each
+triplet - a <strong>codon</strong> - specifies an amino acid.
+<code>ATG</code> is special: it’s the <strong>start codon</strong> that
+signals where translation begins, and <code>TAA</code>,
+<code>TAG</code>, <code>TGA</code> are <strong>stop codons</strong>.</p>
+<p>Shift the reading frame below and watch how completely the encoded
+protein changes - a single-base shift rewrites everything
+downstream.</p>
+<p><em>Interactive widget on the live site: <code>CodonTranslator</code>
+(example sequence <code>ATGGCATTACGTTAA</code>). See
+https://www.musfirajamil.com/primers/reading-a-dna-sequence.</em></p>
+<h2 id="sequence-composition">Sequence composition</h2>
+<p>Not all sequences are alike. The proportion of G and C bases - the
+<strong>GC content</strong> - influences DNA stability and is one of the
+first things a bioinformatician checks when characterising a genome.</p>
+<p><em>Interactive widget on the live site: <code>BaseComposition</code>
+(example sequence <code>ATGGCATTACGTGACTTCGGCGCTA</code>). See
+https://www.musfirajamil.com/primers/reading-a-dna-sequence.</em></p>
+<h2 id="whats-next">What’s next</h2>
+<p>These widgets are plain React components embedded directly in this
+Markdown file - no change to the site’s architecture. The same approach
+scales up to richer tools: a 3D protein-structure viewer (NGL Viewer), a
+genome-track browser (igv.js), or interactive phylogenetic trees, all of
+which can drop straight into future tutorials.</p>
+<h1 id="deepexplainer-on-simulated-genomic-data-deeplift">DeepExplainer
+on Simulated Genomic Data (DeepLIFT)</h1>
+<p><em>A primer on DeepLIFT and DeepExplainer for genomic sequence
+models, why reference-based attributions matter, how simulated motifs
+teach you to trust (or distrust) highlight tracks, and what explanations
+can and cannot claim.</em></p>
+<p>When a neural network scores a DNA or RNA sequence, the prediction
+alone rarely tells you <em>why</em>. Was the model attending to a known
+motif, a GC-rich stretch, or something spurious in the flanks?
+Attribution methods assign credit to individual bases so you can inspect
+that question. This primer introduces <strong>DeepLIFT</strong> and its
+SHAP-facing wrapper <strong>DeepExplainer</strong> at a conceptual
+level, enough to read genomic interpretability plots with
+confidence.</p>
+<h2 id="why-sequence-models-need-explanation">Why sequence models need
+explanation</h2>
+<p>Convolutional and related models for genomics often take one-hot
+encoded sequences and output a binding, accessibility, or expression
+score. They can capture combinatorial patterns that simple motifs miss,
+but a high score does not reveal which nucleotides drove the decision.
+Spurious correlations can look like biology until you inspect
+attributions. Attribution is therefore a quality-control and
+hypothesis-generation tool: it does not replace wet-lab validation or
+prove causality, but it helps you ask better follow-up questions.</p>
+<h2 id="deeplift-in-plain-language">DeepLIFT in plain language</h2>
+<p>DeepLIFT explains a prediction by comparing the network’s activations
+on the real input to activations on a <strong>reference</strong> input.
+Rather than exhaustively flipping every base, it propagates
+difference-from-reference signals backward through the layers using
+rules designed for common nonlinearities.</p>
+<ul>
+<li><strong>Reference choice</strong>, For DNA, a common reference is a
+background sequence (dinucleotide-shuffled or GC-matched). Attribution
+then measures contribution relative to that baseline.</li>
+<li><strong>Conservation of difference</strong>, DeepLIFT aims to
+redistribute the output difference between the real sequence and the
+reference across input features in a coherent way.</li>
+</ul>
+<p>That framing is the conceptual heart of the method. Pure gradient
+saliency can miss saturated units; DeepLIFT was designed to stay
+informative when activations sit in flat regions of a nonlinearity.</p>
+<h2 id="deepexplainer-and-simulated-data">DeepExplainer and simulated
+data</h2>
+<p><code>DeepExplainer</code> in the SHAP library approximates
+Shapley-style attributions for deep models using DeepLIFT-style rules
+and a background set. For one-hot DNA you typically get signed per-base
+scores: positive where bases raised the prediction relative to
+background, negative where they lowered it.</p>
+<p>Simulated genomic data is the cleanest teacher because you
+<em>know</em> the planted signal. Embed a motif in background sequence,
+train a small CNN on the label, then ask whether attributions light up
+the planted positions on held-out sequences. Recovery supports that
+model and explainer are aligned; failure is equally informative, the
+model may have learned GC composition, the reference may be poorly
+chosen, or the network may be underpowered.</p>
+<h2 id="practical-cautions">Practical cautions</h2>
+<ol type="1">
+<li><strong>Reference matters</strong>, A mismatched background can
+invent or hide motifs.</li>
+<li><strong>Attribution is not biology</strong>, A peak means important
+to this model under this reference, not causal in the cell.</li>
+<li><strong>Sanity-check on simulations</strong>, Verify recovery of
+planted sites before trusting highlight tracks on real ChIP, ATAC, or
+expression models.</li>
+</ol>
+<h2 id="takeaway">Takeaway</h2>
+<p>DeepLIFT attributes deep sequence predictions by propagating
+differences from a reference; DeepExplainer exposes that idea in a
+SHAP-friendly API. Use simulated motifs to learn what trustworthy
+attributions look like, then treat real-data peaks as clues to
+interrogate, not as finished biology.</p>
+</body>
+</html>

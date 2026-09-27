@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Musfira Jamil" />
+  <meta name="dcterms.date" content="2026-09-27" />
+  <title>Databricks</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Databricks</h1>
+<p class="subtitle">SQL, Spark, pipelines, and lakehouse patterns</p>
+<p class="author">Musfira Jamil</p>
+<p class="date">2026-09-27</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#ai-drug-discovery-made-easy-your-complete-guide-to-chemprop-on-databricks"
+id="toc-ai-drug-discovery-made-easy-your-complete-guide-to-chemprop-on-databricks">AI
+Drug Discovery Made Easy: Your Complete Guide to Chemprop on
+Databricks</a></li>
+<li><a href="#common-data-modeling-techniques"
+id="toc-common-data-modeling-techniques">3 Common Data Modeling
+Techniques</a>
+<ul>
+<li><a href="#flat-models" id="toc-flat-models">Flat models</a></li>
+<li><a href="#relational-models" id="toc-relational-models">Relational
+models</a></li>
+<li><a href="#dimensional-models"
+id="toc-dimensional-models">Dimensional models</a></li>
+<li><a href="#choosing-in-databricks"
+id="toc-choosing-in-databricks">Choosing in Databricks</a></li>
+</ul></li>
+<li><a href="#dimensional-modeling-and-kimball-architecture"
+id="toc-dimensional-modeling-and-kimball-architecture">Dimensional
+Modeling and Kimball Architecture</a>
+<ul>
+<li><a href="#core-ideas" id="toc-core-ideas">Core ideas</a></li>
+<li><a href="#star-schema-shape" id="toc-star-schema-shape">Star schema
+shape</a></li>
+<li><a href="#slowly-changing-dimensions"
+id="toc-slowly-changing-dimensions">Slowly changing dimensions</a></li>
+<li><a href="#kimball-on-a-lakehouse"
+id="toc-kimball-on-a-lakehouse">Kimball on a lakehouse</a></li>
+<li><a href="#practical-habits" id="toc-practical-habits">Practical
+habits</a></li>
+</ul></li>
+<li><a href="#databricks-series---sql-fundamentals"
+id="toc-databricks-series---sql-fundamentals">DataBricks Series - SQL
+Fundamentals</a></li>
+<li><a href="#common-analytics-query-patterns"
+id="toc-common-analytics-query-patterns">Common Analytics Query
+Patterns</a>
+<ul>
+<li><a href="#filter-then-aggregate"
+id="toc-filter-then-aggregate">Filter then aggregate</a></li>
+<li><a href="#time-series-and-period-comparisons"
+id="toc-time-series-and-period-comparisons">Time series and period
+comparisons</a></li>
+<li><a href="#ranking-and-top-n" id="toc-ranking-and-top-n">Ranking and
+top-N</a></li>
+<li><a href="#cohorts-and-retention-sketches"
+id="toc-cohorts-and-retention-sketches">Cohorts and retention
+sketches</a></li>
+<li><a href="#star-joins-and-bridge-tables"
+id="toc-star-joins-and-bridge-tables">Star joins and bridge
+tables</a></li>
+<li><a href="#semi-additive-and-careful-measures"
+id="toc-semi-additive-and-careful-measures">Semi-additive and careful
+measures</a></li>
+<li><a href="#make-patterns-reusable"
+id="toc-make-patterns-reusable">Make patterns reusable</a></li>
+</ul></li>
+<li><a href="#processing-big-data-with-apache-spark-in-databricks"
+id="toc-processing-big-data-with-apache-spark-in-databricks">Processing
+Big Data with Apache Spark in Databricks</a>
+<ul>
+<li><a href="#dataframes-not-rows-in-a-loop"
+id="toc-dataframes-not-rows-in-a-loop">DataFrames, not rows in a
+loop</a></li>
+<li><a href="#lazy-plans-and-actions"
+id="toc-lazy-plans-and-actions">Lazy plans and actions</a></li>
+<li><a href="#partitions-and-shuffle"
+id="toc-partitions-and-shuffle">Partitions and shuffle</a></li>
+<li><a href="#delta-lake-and-spark-together"
+id="toc-delta-lake-and-spark-together">Delta Lake and Spark
+together</a></li>
+<li><a href="#cluster-and-job-habits"
+id="toc-cluster-and-job-habits">Cluster and job habits</a></li>
+<li><a href="#when-spark-is-the-right-tool"
+id="toc-when-spark-is-the-right-tool">When Spark is the right
+tool</a></li>
+</ul></li>
+<li><a href="#building-data-pipelines-in-databricks"
+id="toc-building-data-pipelines-in-databricks">Building Data Pipelines
+in Databricks</a>
+<ul>
+<li><a href="#medallion-layers-as-a-contract"
+id="toc-medallion-layers-as-a-contract">Medallion layers as a
+contract</a></li>
+<li><a href="#incremental-over-full-reload"
+id="toc-incremental-over-full-reload">Incremental over full
+reload</a></li>
+<li><a href="#orchestration-with-workflows"
+id="toc-orchestration-with-workflows">Orchestration with
+Workflows</a></li>
+<li><a href="#quality-and-observability"
+id="toc-quality-and-observability">Quality and observability</a></li>
+<li><a href="#governance-and-environments"
+id="toc-governance-and-environments">Governance and
+environments</a></li>
+<li><a href="#design-for-change" id="toc-design-for-change">Design for
+change</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>Notes on SQL, Spark, pipelines, dimensional modelling, analytics
+queries, and Chemprop for drug discovery on Databricks.</p>
+<p>These chapters started as learning notes and primers.</p>
+<p><a href="../index.html" class="handbook-link">Notes library</a></p>
+<h1
+id="ai-drug-discovery-made-easy-your-complete-guide-to-chemprop-on-databricks">AI
+Drug Discovery Made Easy: Your Complete Guide to Chemprop on
+Databricks</h1>
+<p><em>Notes on using Chemprop, a directed message-passing graph neural
+network for molecular property prediction, as a managed workflow on
+Databricks, from loading pretrained models to training multi-task ADMET
+regressors.</em></p>
+<p><em>These are my notes on a Databricks Community technical blog post,
+<a
+href="https://community.databricks.com/t5/technical-blog/ai-drug-discovery-made-easy-your-complete-guide-to-chemprop-on/ba-p/111750">“AI
+Drug Discovery Made Easy: Your Complete Guide to Chemprop on
+Databricks.”</a> All credit for the original workflow and code goes to
+the Databricks authors, see the link for the full walkthrough and
+runnable notebooks.</em></p>
+<p>Computational drug discovery got a well-known proof point in 2020,
+when a graph neural network flagged halicin, a compound already sitting
+in a screening library, as a candidate antibiotic with a structure
+unlike anything in existing drug classes. That’s the pitch for pairing a
+chemistry-aware model like Chemprop with a platform like Databricks:
+search chemical space faster, and do it on infrastructure that also
+handles the data engineering and deployment side.</p>
+<h3 id="what-chemprop-actually-models">What Chemprop actually
+models</h3>
+<p>Chemprop is a directed message-passing neural network (D-MPNN) built
+specifically for molecules. Instead of hand-engineered chemical
+descriptors, it treats a molecule as a graph, atoms as nodes, bonds as
+edges, and runs several rounds of message passing so that information
+about neighboring atoms and bonds propagates through the structure. The
+result is a learned molecular fingerprint that feeds into a feed-forward
+network for the actual prediction task, whether that’s a classification
+(toxic / non-toxic) or a regression (solubility, binding affinity, an
+ADMET property).</p>
+<h3 id="why-run-it-on-databricks-specifically">Why run it on Databricks
+specifically</h3>
+<p>The argument isn’t that Databricks changes the modeling, it’s that it
+removes friction around everything adjacent to modeling. Unity Catalog
+gives you a governed, discoverable place to keep datasets and registered
+models so a chemistry team and a data engineering team aren’t passing
+CSVs around. MLflow handles experiment tracking and model registry, so a
+trained Chemprop model can be logged, versioned, and served without a
+bespoke deployment pipeline. For a workflow that moves from raw SMILES
+strings to a served prediction endpoint, having compute, governance, and
+serving in one place is the practical win.</p>
+<h3 id="the-four-workflows-the-guide-walks-through">The four workflows
+the guide walks through</h3>
+<p>The Databricks post runs these against Unity Catalog data and
+MLflow’s registry. To show what’s actually happening underneath, the
+snippets below are trimmed straight from Chemprop’s own <a
+href="https://github.com/chemprop/chemprop/tree/main/examples">example
+notebooks</a> (Chemprop is MIT-licensed), Databricks just wraps this
+with governed data access and managed serving.</p>
+<p><strong>1. Inference with a pretrained model</strong>, loading an
+existing Chemprop checkpoint and scoring new molecules for a property
+like aqueous solubility, with no training step at all.</p>
+<pre><code>from pathlib import Path
+import numpy as np
+import pandas as pd
+import torch
+from lightning import pytorch as pl
+from chemprop import data, featurizers, models
+
+chemprop_dir = Path.cwd().parent
+checkpoint_path = chemprop_dir / &quot;tests&quot; / &quot;data&quot; / &quot;example_model_v2_regression_mol.ckpt&quot;
+mpnn = models.MPNN.load_from_checkpoint(checkpoint_path)
+
+test_path = chemprop_dir / &quot;tests&quot; / &quot;data&quot; / &quot;regression&quot; / &quot;mol&quot; / &quot;mol.csv&quot;
+df_test = pd.read_csv(test_path)
+smis = df_test[&quot;smiles&quot;]
+
+test_data = [data.MoleculeDatapoint.from_smi(smi) for smi in smis]
+featurizer = featurizers.SimpleMoleculeMolGraphFeaturizer()
+test_dset = data.MoleculeDataset(test_data, featurizer=featurizer)
+test_loader = data.build_dataloader(test_dset, shuffle=False)
+
+with torch.inference_mode():
+ trainer = pl.Trainer(logger=None, accelerator=&quot;cpu&quot;, devices=1)
+ test_preds = trainer.predict(mpnn, test_loader)
+
+df_test[&quot;pred&quot;] = np.concatenate(test_preds, axis=0)</code></pre>
+<p><strong>2. Training a single-task classifier</strong>, fine-tuning
+Chemprop on a labeled dataset for a binary property such as
+toxicity.</p>
+<pre><code>from pathlib import Path
+import pandas as pd
+from lightning import pytorch as pl
+from chemprop import data, featurizers, models, nn
+
+input_path = Path.cwd().parent / &quot;tests&quot; / &quot;data&quot; / &quot;classification&quot; / &quot;mol.csv&quot;
+target_columns = [&quot;NR-AhR&quot;, &quot;NR-ER&quot;, &quot;SR-ARE&quot;, &quot;SR-MMP&quot;]
+
+df_input = pd.read_csv(input_path)
+smis = df_input.loc[:, &quot;smiles&quot;].values
+ys = df_input.loc[:, target_columns].values
+all_data = [data.MoleculeDatapoint.from_smi(smi, y) for smi, y in zip(smis, ys)]
+
+mols = [d.mol for d in all_data]
+train_indices, val_indices, test_indices = data.make_split_indices(mols, &quot;random&quot;, (0.8, 0.1, 0.1))
+train_data, val_data, test_data = data.split_data_by_indices(all_data, train_indices, val_indices, test_indices)
+
+featurizer = featurizers.SimpleMoleculeMolGraphFeaturizer()
+train_dset = data.MoleculeDataset(train_data[0], featurizer)
+val_dset = data.MoleculeDataset(val_data[0], featurizer)
+test_dset = data.MoleculeDataset(test_data[0], featurizer)
+
+train_loader = data.build_dataloader(train_dset)
+val_loader = data.build_dataloader(val_dset, shuffle=False)
+test_loader = data.build_dataloader(test_dset, shuffle=False)
+
+mp = nn.BondMessagePassing()
+agg = nn.MeanAggregation()
+ffn = nn.BinaryClassificationFFN(n_tasks=len(target_columns))
+mpnn = models.MPNN(mp, agg, ffn, batch_norm=False)
+
+trainer = pl.Trainer(
+ accelerator=&quot;cpu&quot;, devices=1, max_epochs=20, enable_checkpointing=True,
+)
+trainer.fit(mpnn, train_loader, val_loader)
+results = trainer.test(mpnn, test_loader)</code></pre>
+<p><strong>3. Serving via MLflow’s registry</strong>, pulling a
+registered model back out of Unity Catalog/MLflow for inference, which
+is the pattern you’d actually use once a model is production-bound
+rather than sitting in a notebook. This part is Databricks/MLflow
+plumbing rather than Chemprop code, so see the original post for that
+snippet.</p>
+<p><strong>4. Multi-task ADMET regression</strong>, training one model
+to predict several absorption/distribution/metabolism/excretion/toxicity
+endpoints simultaneously, which is closer to how a real drug-candidate
+triage pipeline would be structured than any single-property demo.</p>
+<pre><code>from pathlib import Path
+import torch
+import pandas as pd
+from lightning import pytorch as pl
+from chemprop import data, models, nn
+
+input_path = Path.cwd().parent / &quot;tests&quot; / &quot;data&quot; / &quot;regression&quot; / &quot;mol_multitask.csv&quot;
+target_columns = [&quot;mu&quot;, &quot;alpha&quot;, &quot;homo&quot;, &quot;lumo&quot;, &quot;gap&quot;, &quot;r2&quot;, &quot;zpve&quot;, &quot;cv&quot;, &quot;u0&quot;, &quot;u298&quot;, &quot;h298&quot;, &quot;g298&quot;]
+
+df_input = pd.read_csv(input_path)
+smis = df_input.loc[:, &quot;smiles&quot;].values
+ys = df_input.loc[:, target_columns].values
+datapoints = [data.MoleculeDatapoint.from_smi(smi, y) for smi, y in zip(smis, ys)]
+
+split_indices = data.make_split_indices(datapoints)
+train_data, val_data, test_data = data.split_data_by_indices(datapoints, *split_indices)
+train_dset = data.MoleculeDataset(train_data[0])
+val_dset = data.MoleculeDataset(val_data[0])
+test_dset = data.MoleculeDataset(test_data[0])
+
+output_scaler = train_dset.normalize_targets()
+val_dset.normalize_targets(output_scaler)
+train_loader = data.build_dataloader(train_dset)
+val_loader = data.build_dataloader(val_dset)
+test_loader = data.build_dataloader(test_dset)
+
+output_transform = nn.transforms.UnscaleTransform.from_standard_scaler(output_scaler)
+ffn = nn.RegressionFFN(n_tasks=len(target_columns), output_transform=output_transform)
+chemprop_model = models.MPNN(nn.BondMessagePassing(), nn.MeanAggregation(), ffn)
+
+trainer = pl.Trainer(logger=False, enable_checkpointing=False, max_epochs=1)
+trainer.fit(chemprop_model, train_loader, val_loader)
+
+preds = trainer.predict(chemprop_model, test_loader)
+preds = torch.concat(preds, axis=1)</code></pre>
+<h3 id="takeaway">Takeaway</h3>
+<p>The interesting part isn’t that Chemprop works, message-passing GNNs
+for molecular property prediction are well established, it’s the
+integration story: a specialized chemistry model dropped into a
+general-purpose data platform’s governance and serving layer, so the
+same infrastructure that tracks a churn model can track a toxicity
+classifier. Worth reading the full post for the actual notebook code and
+the ADMET multi-task setup in detail.</p>
+<h1 id="common-data-modeling-techniques">3 Common Data Modeling
+Techniques</h1>
+<p><em>A practical tour of flat, relational, and dimensional modelling,
+with Databricks SQL examples so you can choose the right shape for
+analytics and pipelines.</em></p>
+<p>Data modelling is how you decide what your tables mean and how they
+relate. In Databricks you will often meet three styles:
+<strong>flat</strong>, <strong>relational</strong>, and
+<strong>dimensional</strong>. None is universally best. Each trades
+simplicity against flexibility, and each fits different stages of a
+lakehouse pipeline.</p>
+<h2 id="flat-models">Flat models</h2>
+<p>A flat model is a single wide table: one row per event or entity,
+with many columns and little or no joining. Think of a CSV of sales with
+customer name, product name, and region all denormalised onto the same
+row. Flat models are easy to load, easy to query for beginners, and
+common for landing zones or feature tables.</p>
+<p>The downside is redundancy. The same customer details repeat on every
+order row. Updates become painful, and storage grows. Flat tables also
+encourage analytics that are hard to reuse across teams.</p>
+<pre><code>CREATE OR REPLACE TABLE sales_flat AS
+SELECT
+ order_id,
+ order_date,
+ customer_id,
+ customer_name,
+ product_id,
+ product_name,
+ quantity,
+ unit_price,
+ quantity * unit_price AS line_amount
+FROM bronze.orders_raw;</code></pre>
+<p>Use flat models for exploration, machine learning feature stores, or
+narrow reporting extracts. Avoid them as the long-term system of record
+when many teams need consistent definitions.</p>
+<h2 id="relational-models">Relational models</h2>
+<p>Relational modelling normalises entities into related tables:
+customers, products, orders, order lines. Keys link them. This is the
+classic OLTP and enterprise warehouse style. In Databricks it often
+appears in silver layers where you clean and conform source systems.</p>
+<pre><code>CREATE OR REPLACE TABLE dim_customer_rel (
+ customer_id STRING PRIMARY KEY,
+ customer_name STRING,
+ email STRING,
+ city STRING
+);
+
+CREATE OR REPLACE TABLE fact_order_line_rel (
+ order_line_id STRING PRIMARY KEY,
+ order_id STRING,
+ customer_id STRING,
+ product_id STRING,
+ quantity INT,
+ unit_price DECIMAL(12,2)
+);</code></pre>
+<p>Queries then join on keys:</p>
+<pre><code>SELECT c.customer_name, SUM(f.quantity * f.unit_price) AS revenue
+FROM fact_order_line_rel f
+JOIN dim_customer_rel c ON f.customer_id = c.customer_id
+GROUP BY c.customer_name;</code></pre>
+<p>Relational models reduce duplication and protect integrity. They can
+be slower for heavy analytics if you join many large tables without good
+partitioning and clustering. They also ask analysts to understand the
+schema deeply.</p>
+<h2 id="dimensional-models">Dimensional models</h2>
+<p>Dimensional modelling organises data for analysis: <em>facts</em>
+hold measures (sales amount, quantity), and <em>dimensions</em> hold
+descriptive context (date, customer, product). The classic star schema
+puts one fact table at the centre with dimensions around it.</p>
+<pre><code>CREATE OR REPLACE TABLE fact_sales (
+ date_key INT,
+ customer_key BIGINT,
+ product_key BIGINT,
+ quantity INT,
+ sales_amount DECIMAL(14,2)
+);
+
+CREATE OR REPLACE TABLE dim_product (
+ product_key BIGINT,
+ product_id STRING,
+ product_name STRING,
+ category STRING
+);</code></pre>
+<p>Dimensional models shine for BI tools and repeated business
+questions: revenue by category, orders by month, churn by segment. They
+are usually built in gold layers after you have cleaned relational or
+semi-structured sources.</p>
+<h2 id="choosing-in-databricks">Choosing in Databricks</h2>
+<ul>
+<li><strong>Bronze:</strong> keep close to source, often flat or lightly
+structured.</li>
+<li><strong>Silver:</strong> relational or well-keyed entities for
+reuse.</li>
+<li><strong>Gold:</strong> dimensional stars or wide flat marts for
+consumption.</li>
+</ul>
+<p>Start from the questions people ask. If analysts need flexible
+drill-downs across many attributes, lean dimensional. If you are
+integrating operational systems, lean relational. If you need a fast
+one-off extract, a flat table is fine, just do not pretend it is a
+warehouse.</p>
+<p>Good modelling is less about dogma and more about clarity: every
+column should have a clear grain, a clear owner, and a clear path into
+the next layer of your lakehouse.</p>
+<h1 id="dimensional-modeling-and-kimball-architecture">Dimensional
+Modeling and Kimball Architecture</h1>
+<p><em>How Kimball-style dimensional modelling maps onto a Databricks
+lakehouse: facts, dimensions, conformed keys, and practical design
+habits.</em></p>
+<p>Kimball dimensional modelling is a practical way to design analytics
+data so business questions are easy to ask and hard to get wrong. In
+Databricks, the same ideas sit comfortably in a medallion lakehouse:
+cleaned silver entities feed gold stars that BI tools and SQL notebooks
+consume.</p>
+<h2 id="core-ideas">Core ideas</h2>
+<p>A <strong>fact table</strong> records measurable events at a declared
+grain, for example one row per order line per day. A <strong>dimension
+table</strong> describes the who, what, where, and when. Surrogate keys
+(integers or bigints you generate) link facts to dimensions so natural
+keys from source systems can change without breaking history.</p>
+<ul>
+<li><strong>Grain:</strong> state the grain in one sentence before you
+write DDL.</li>
+<li><strong>Additive measures:</strong> prefer amounts you can sum
+safely across dimensions.</li>
+<li><strong>Conformed dimensions:</strong> shared date, customer, and
+product dims across marts.</li>
+</ul>
+<h2 id="star-schema-shape">Star schema shape</h2>
+<p>In a star, the fact sits in the middle. Dimensions hang off it with
+few joins. Snowflakes normalise dimensions further (product to category
+to department). Stars are usually simpler for analysts; snowflakes can
+reduce duplication but add join complexity.</p>
+<pre><code>CREATE OR REPLACE TABLE gold.fact_orders (
+ order_date_key INT NOT NULL,
+ customer_key BIGINT NOT NULL,
+ product_key BIGINT NOT NULL,
+ order_id STRING NOT NULL,
+ quantity INT,
+ net_amount DECIMAL(14,2),
+ CONSTRAINT pk_fact_orders PRIMARY KEY (order_id, product_key)
+);
+
+CREATE OR REPLACE TABLE gold.dim_date (
+ date_key INT PRIMARY KEY,
+ full_date DATE,
+ year INT,
+ month_name STRING,
+ fiscal_quarter STRING
+);</code></pre>
+<h2 id="slowly-changing-dimensions">Slowly changing dimensions</h2>
+<p>Customer attributes change. Kimball Type 1 overwrites the current
+value. Type 2 keeps history with effective dates or version rows. In
+Databricks, Delta tables make Type 2 practical: merge new versions,
+expire old ones, and point facts at the correct surrogate key for that
+point in time.</p>
+<pre><code>-- Conceptual Type 2 pattern
+MERGE INTO gold.dim_customer t
+USING staging.customer_changes s
+ON t.customer_id = s.customer_id AND t.is_current = true
+WHEN MATCHED AND t.email &lt;&gt; s.email THEN UPDATE SET
+ t.is_current = false,
+ t.valid_to = current_date()
+WHEN NOT MATCHED THEN INSERT *;</code></pre>
+<p>Keep SCD logic in one place (a notebook job or dbt model) so every
+mart inherits the same history rules.</p>
+<h2 id="kimball-on-a-lakehouse">Kimball on a lakehouse</h2>
+<p>Classic Kimball assumed a relational warehouse bus. On Databricks you
+still want a <em>bus</em>: shared conformed dimensions published once,
+then reused. What changes is storage and compute, Delta Lake, Unity
+Catalog, and SQL warehouses, not the modelling discipline.</p>
+<ol type="1">
+<li>Define business processes and grains with stakeholders.</li>
+<li>Build conformed dimensions in gold (date, customer, product).</li>
+<li>Load facts with surrogate keys and declared additive measures.</li>
+<li>Document grain, sources, and refresh cadence in the catalogue.</li>
+</ol>
+<h2 id="practical-habits">Practical habits</h2>
+<p>Name tables clearly (<code>fact_</code> and <code>dim_</code>). Avoid
+putting descriptive text on facts. Prefer integer date keys for pruning.
+Partition large facts by date when queries filter that way, and
+liquid-cluster or Z-order high-cardinality join keys when needed.</p>
+<p>Kimball is not ceremony for its own sake. It is a shared language:
+when someone says “the grain is one shipment per day”, everyone knows
+what a duplicate means and which dashboard is trustworthy. That clarity
+is what makes dimensional modelling worth learning in Databricks.</p>
+<h1 id="databricks-series---sql-fundamentals">DataBricks Series - SQL
+Fundamentals</h1>
+<p><em>The core SQL patterns worth mastering first, filtering,
+aggregation, joins, CTEs, window functions, and indexing, with runnable
+examples against a students table.</em></p>
+<p>SQL (Structured Query Language) is a standardized programming
+language used to manage, query, and manipulate relational databases. It
+allows users to retrieve, update, insert, and delete data
+efficiently.</p>
+<p>If you’re learning SQL, I’d recommend focusing on the following
+topics:</p>
+<ul>
+<li>SELECT + WHERE + JOIN (most used)</li>
+<li>GROUP BY + HAVING (summarizing data)</li>
+<li>ORDER BY + LIMIT (controlling results)</li>
+<li>CTEs + Subqueries (for complex logic)</li>
+<li>Window Functions (advanced analytics)</li>
+<li>Indexes (for performance tuning)</li>
+</ul>
+<p>We will focus on the most-used concepts, which upon mastery will
+allow you to accomplish 80% of typical query tasks.</p>
+<ol type="1">
+<li><strong>Basic Querying (SELECT, FROM, WHERE)</strong></li>
+</ol>
+<p>Let’s assume we are tasked with loading data from a students table
+for students who have achieved grades &gt; 85.</p>
+<pre><code>SELECT *
+FROM students
+WHERE grade &gt;= 85;</code></pre>
+<p>In this query, <code>SELECT *</code> tells the SQL engine to load all
+available columns in the table students and apply the filter to the
+grade column.</p>
+<ol start="2" type="1">
+<li><strong>Filtering Data (WHERE, AND, OR, IN, LIKE,
+BETWEEN)</strong></li>
+</ol>
+<pre><code>SELECT * FROM students
+WHERE grade BETWEEN 80 AND 90
+AND department IN (&#39;Computer Science&#39;, &#39;Math&#39;);</code></pre>
+<ol start="3" type="1">
+<li><strong>Sorting and Limiting Results (ORDER BY, LIMIT)</strong></li>
+</ol>
+<pre><code>SELECT * FROM students
+ORDER BY grade DESC
+LIMIT 10;</code></pre>
+<ol start="4" type="1">
+<li><strong>Aggregation (COUNT, SUM, AVG, MIN, MAX, GROUP BY,
+HAVING)</strong></li>
+</ol>
+<pre><code>SELECT department, AVG(grade) AS avg_grade
+FROM students
+GROUP BY department
+HAVING AVG(grade) &gt; 80;</code></pre>
+<p>Here we can replace AVG with any of the following:</p>
+<ul>
+<li>COUNT (count rows)</li>
+<li>SUM (total sum of values)</li>
+<li>AVG (average value)</li>
+<li>MIN/MAX (smallest/largest value)</li>
+<li>GROUP BY (aggregates by category)</li>
+<li>HAVING (filters aggregated results)</li>
+</ul>
+<h3 id="joins-inner-left-right-full">5. Joins (INNER, LEFT, RIGHT,
+FULL)</h3>
+<pre><code>SELECT s.first_name, s.last_name, c.course_name
+FROM students s
+INNER JOIN enrollments e ON s.student_id = e.student_id
+INNER JOIN courses c ON e.course_id = c.course_id;</code></pre>
+<ol start="6" type="1">
+<li><strong>Subqueries (Nested Queries)</strong></li>
+</ol>
+<pre><code>SELECT first_name, last_name
+FROM students
+WHERE student_id IN (
+ SELECT student_id FROM enrollments WHERE course_id = 101
+);</code></pre>
+<ol start="7" type="1">
+<li><strong>Common Table Expressions (CTEs)</strong></li>
+</ol>
+<pre><code>WITH top_students AS (
+ SELECT student_id, grade FROM students WHERE grade &gt; 90
+)
+SELECT s.first_name, s.last_name, t.grade
+FROM top_students t
+JOIN students s ON s.student_id = t.student_id;</code></pre>
+<p><code>WITH</code> defines temporary query results.</p>
+<ol start="8" type="1">
+<li><strong>Window Functions (OVER, PARTITION BY)</strong></li>
+</ol>
+<pre><code>SELECT student_id, grade,
+ RANK() OVER (PARTITION BY course_id ORDER BY grade DESC) AS rank
+FROM enrollments;</code></pre>
+<p>Concepts to know:</p>
+<ul>
+<li>OVER (defines how results are computed)</li>
+<li>PARTITION BY (grouping for window calculations)</li>
+<li>RANK(), DENSE_RANK(), ROW_NUMBER() (ranking functions)</li>
+</ul>
+<ol start="9" type="1">
+<li><strong>Updating Data (INSERT, UPDATE, DELETE)</strong></li>
+</ol>
+<pre><code>UPDATE students
+SET grade = 95
+WHERE student_id = 101;
+
+INSERT INTO students (first_name, last_name, grade)
+VALUES (&#39;John&#39;, &#39;Doe&#39;, 88);
+
+DELETE FROM students WHERE grade &lt; 50;</code></pre>
+<p>Extensions that are super important to know:</p>
+<ul>
+<li>INSERT INTO (adds new records)</li>
+<li>UPDATE (modifies existing records)</li>
+<li>DELETE (removes records)</li>
+</ul>
+<p>Note: Always use WHERE with <strong>UPDATE</strong> and
+<strong>DELETE</strong> to prevent accidental changes!</p>
+<ol start="10" type="1">
+<li><strong>Indexing for Performance (INDEX, EXPLAIN)</strong></li>
+</ol>
+<pre><code>CREATE INDEX idx_students ON students (last_name);</code></pre>
+<p><strong>Concepts to know:</strong></p>
+<ul>
+<li>CREATE INDEX (speeds up searches)</li>
+<li>EXPLAIN (analyzes query execution plan)</li>
+</ul>
+<h1 id="common-analytics-query-patterns">Common Analytics Query
+Patterns</h1>
+<p><em>Reusable SQL patterns for analytics on Databricks: filters,
+aggregations, window functions, cohort logic, and star-schema
+joins.</em></p>
+<p>Most analytics work is a small set of patterns repeated with
+different columns. Learn the patterns once, and Databricks SQL (or Spark
+SQL) becomes much faster to write, and easier to review.</p>
+<h2 id="filter-then-aggregate">Filter then aggregate</h2>
+<p>Start with a clear grain, filter early, then group. Push predicates
+that prune partitions (especially date) as close to the base table as
+you can.</p>
+<pre><code>SELECT
+ product_category,
+ SUM(net_amount) AS revenue,
+ COUNT(DISTINCT order_id) AS orders
+FROM gold.fact_orders f
+JOIN gold.dim_product p ON f.product_key = p.product_key
+JOIN gold.dim_date d ON f.order_date_key = d.date_key
+WHERE d.full_date BETWEEN DATE &#39;2026-01-01&#39; AND DATE &#39;2026-03-31&#39;
+GROUP BY product_category
+ORDER BY revenue DESC;</code></pre>
+<h2 id="time-series-and-period-comparisons">Time series and period
+comparisons</h2>
+<p>Window functions compare a row to its neighbours without collapsing
+the grain. Use them for running totals, previous-period values, and
+moving averages.</p>
+<pre><code>SELECT
+ full_date,
+ daily_revenue,
+ LAG(daily_revenue, 7) OVER (ORDER BY full_date) AS revenue_7d_ago,
+ AVG(daily_revenue) OVER (
+ ORDER BY full_date
+ ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+ ) AS moving_avg_7d
+FROM daily_sales;</code></pre>
+<h2 id="ranking-and-top-n">Ranking and top-N</h2>
+<p>Rank within a partition when stakeholders ask for “top products per
+region”. Prefer <code>ROW_NUMBER</code> when you need a deterministic
+single winner, and <code>DENSE_RANK</code> when ties should share a
+rank.</p>
+<pre><code>WITH ranked AS (
+ SELECT
+ region,
+ product_name,
+ revenue,
+ ROW_NUMBER() OVER (
+ PARTITION BY region
+ ORDER BY revenue DESC
+ ) AS rn
+ FROM region_product_revenue
+)
+SELECT * FROM ranked WHERE rn &lt;= 5;</code></pre>
+<h2 id="cohorts-and-retention-sketches">Cohorts and retention
+sketches</h2>
+<p>Cohort analysis groups users by first activity month, then tracks
+return activity. Keep the cohort assignment in a reusable view so
+dashboards stay consistent.</p>
+<pre><code>WITH first_order AS (
+ SELECT customer_key, MIN(full_date) AS cohort_date
+ FROM gold.fact_orders f
+ JOIN gold.dim_date d ON f.order_date_key = d.date_key
+ GROUP BY customer_key
+)
+SELECT
+ date_trunc(&#39;MONTH&#39;, fo.cohort_date) AS cohort_month,
+ date_trunc(&#39;MONTH&#39;, d.full_date) AS activity_month,
+ COUNT(DISTINCT f.customer_key) AS active_customers
+FROM gold.fact_orders f
+JOIN gold.dim_date d ON f.order_date_key = d.date_key
+JOIN first_order fo ON f.customer_key = fo.customer_key
+GROUP BY 1, 2;</code></pre>
+<h2 id="star-joins-and-bridge-tables">Star joins and bridge tables</h2>
+<p>Join facts to dimensions on surrogate keys. When a fact relates to
+many values of one dimension (for example an order with many
+promotions), use a bridge table rather than exploding the fact grain
+silently.</p>
+<h2 id="semi-additive-and-careful-measures">Semi-additive and careful
+measures</h2>
+<p>Not everything sums. Account balances and inventory snapshots are
+semi-additive: you may sum across products but not across days. Document
+that in the catalogue and encode it in metrics views so tools do not
+invent wrong totals.</p>
+<ul>
+<li>Use <code>SUM</code> for additive facts like revenue and
+quantity.</li>
+<li>Use last-in-period logic for snapshots.</li>
+<li>Prefer distinct counts only when the grain truly requires them, they
+are expensive.</li>
+</ul>
+<h2 id="make-patterns-reusable">Make patterns reusable</h2>
+<p>Wrap stable logic in views or metric layers. Keep notebooks for
+exploration, not as the only definition of “monthly revenue”. When a
+pattern shows up three times, promote it. That is how analytics teams
+stay organised as the lakehouse grows.</p>
+<h1 id="processing-big-data-with-apache-spark-in-databricks">Processing
+Big Data with Apache Spark in Databricks</h1>
+<p><em>How Apache Spark powers Databricks workloads: DataFrames,
+transformations, partitioning, and practical habits for reliable
+large-scale processing.</em></p>
+<p>Apache Spark is the distributed engine underneath most Databricks
+data engineering. You write transformations against DataFrames (or SQL),
+and Spark plans them across a cluster. Understanding a few core ideas,
+lazy evaluation, partitions, shuffle, and caching, pays off quickly when
+jobs slow down or spill to disk.</p>
+<h2 id="dataframes-not-rows-in-a-loop">DataFrames, not rows in a
+loop</h2>
+<p>Spark works best when you describe <em>what</em> you want in bulk
+operations: filter, select, join, aggregate. Avoid collecting large
+results to the driver or writing Python loops over partitions unless you
+truly need custom logic via pandas UDFs or mapInPandas.</p>
+<pre><code>from pyspark.sql import functions as F
+
+df = spark.table(&quot;silver.orders&quot;)
+clean = (
+ df
+ .filter(F.col(&quot;order_date&quot;) &gt;= &quot;2026-01-01&quot;)
+ .withColumn(&quot;line_amount&quot;, F.col(&quot;quantity&quot;) * F.col(&quot;unit_price&quot;))
+ .groupBy(&quot;customer_id&quot;)
+ .agg(F.sum(&quot;line_amount&quot;).alias(&quot;revenue&quot;))
+)
+clean.write.mode(&quot;overwrite&quot;).saveAsTable(&quot;gold.customer_revenue&quot;)</code></pre>
+<h2 id="lazy-plans-and-actions">Lazy plans and actions</h2>
+<p>Transformations build a logical plan. Actions such as
+<code>count</code>, <code>collect</code>, <code>show</code>, or a write
+trigger execution. That laziness lets Catalyst optimise the whole
+pipeline. Chain filters before wide joins when you can, and prefer SQL
+or DataFrame APIs over opaque UDFs so the optimiser can see your
+intent.</p>
+<h2 id="partitions-and-shuffle">Partitions and shuffle</h2>
+<p>Data is split into partitions processed in parallel. A
+<strong>shuffle</strong> redistributes data for joins and group-bys.
+Shuffles are expensive: they move bytes across the network and can
+create skew when one key dominates.</p>
+<ul>
+<li>Filter and project early to shrink shuffle input.</li>
+<li>Broadcast small dimension tables with <code>broadcast()</code> or
+rely on auto-broadcast hints when sizes allow.</li>
+<li>Watch for skew, salting keys or Adaptive Query Execution (AQE) can
+help.</li>
+</ul>
+<pre><code>from pyspark.sql.functions import broadcast
+
+facts = spark.table(&quot;gold.fact_orders&quot;)
+dim_prod = spark.table(&quot;gold.dim_product&quot;)
+joined = facts.join(broadcast(dim_prod), &quot;product_key&quot;)</code></pre>
+<h2 id="delta-lake-and-spark-together">Delta Lake and Spark
+together</h2>
+<p>In Databricks you usually read and write Delta tables. ACID
+transactions, time travel, and <code>MERGE</code> make incremental
+pipelines safer than raw Parquet folders. Combine Spark transformations
+with Delta features: optimise layout, vacuum old files carefully, and
+use Change Data Feed when downstream jobs need only the deltas.</p>
+<h2 id="cluster-and-job-habits">Cluster and job habits</h2>
+<ol type="1">
+<li>Use job clusters for scheduled work; keep interactive clusters for
+development.</li>
+<li>Size for the shuffle-heavy stages, not only the scan.</li>
+<li>Prefer Photon-accelerated SQL warehouses for BI-shaped queries when
+available.</li>
+<li>Log metrics: rows in, rows out, duration, and data skipped by
+partition pruning.</li>
+</ol>
+<h2 id="when-spark-is-the-right-tool">When Spark is the right tool</h2>
+<p>Spark shines for large batch and micro-batch ETL, feature
+engineering, and joins that no longer fit on a single machine. For
+lightweight transforms on small tables, a SQL warehouse query may be
+simpler and cheaper. Match the engine to the data volume and latency,
+not to habit.</p>
+<p>Think in DataFrames, respect the shuffle, and keep tables in Delta
+with clear layers. That combination is the everyday craft of processing
+big data in Databricks.</p>
+<h1 id="building-data-pipelines-in-databricks">Building Data Pipelines
+in Databricks</h1>
+<p><em>A practical guide to Databricks pipelines: medallion layers,
+incremental loads, orchestration, quality checks, and operational habits
+that keep data trustworthy.</em></p>
+<p>A data pipeline moves information from sources to something people
+can trust, tables, dashboards, or models, on a schedule and with clear
+ownership. In Databricks that usually means notebooks or workflows
+reading raw files or CDC streams, writing Delta tables through bronze,
+silver, and gold layers, and publishing into Unity Catalog.</p>
+<h2 id="medallion-layers-as-a-contract">Medallion layers as a
+contract</h2>
+<ul>
+<li><strong>Bronze:</strong> append-only landing, schema-on-read or
+lightly typed, retain source quirks.</li>
+<li><strong>Silver:</strong> cleaned, deduplicated, conformed entities
+and events.</li>
+<li><strong>Gold:</strong> business marts, dimensional models, and
+aggregates for consumption.</li>
+</ul>
+<p>Treat each layer as a contract. Downstream jobs should not reach into
+bronze for business logic. That separation keeps reprocessing and
+debugging organised when a source changes shape.</p>
+<h2 id="incremental-over-full-reload">Incremental over full reload</h2>
+<p>Prefer incremental processing: read only new files, new partitions,
+or Change Data Feed rows, then merge into silver. Full reloads are fine
+for small dimensions; they become costly and slow for large facts.</p>
+<pre><code>-- Merge daily increments into silver
+MERGE INTO silver.orders t
+USING staging.orders_day s
+ON t.order_id = s.order_id
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *;</code></pre>
+<p>Idempotency matters. Re-running yesterday’s job should not
+double-count. Use deterministic keys, merge logic, and partition
+overlays so retries are safe.</p>
+<h2 id="orchestration-with-workflows">Orchestration with Workflows</h2>
+<p>Databricks Workflows (jobs) chain tasks: ingest, transform, test, and
+notify. Keep tasks small and explicit, one responsibility per task, so
+failures are easy to isolate. Pass parameters for run dates rather than
+hard-coding paths inside notebooks.</p>
+<ol type="1">
+<li>Ingest to bronze (Auto Loader or batch copy).</li>
+<li>Transform to silver with validation.</li>
+<li>Build gold marts.</li>
+<li>Run data quality checks and refresh downstream caches.</li>
+</ol>
+<h2 id="quality-and-observability">Quality and observability</h2>
+<p>Pipelines without checks eventually lie. Add expectations at silver:
+non-null keys, valid ranges, referential integrity samples. Quarantine
+bad rows instead of failing silently. Emit row counts and freshness
+metrics so on-call engineers can see whether gold is stale before
+stakeholders do.</p>
+<pre><code>from pyspark.sql import functions as F
+
+silver = spark.table(&quot;silver.orders&quot;)
+assert silver.filter(F.col(&quot;order_id&quot;).isNull()).count() == 0
+freshness_hours = (
+ spark.sql(
+ &quot;SELECT (unix_timestamp() - unix_timestamp(MAX(_ingested_at))) / 3600 &quot;
+ &quot;FROM silver.orders&quot;
+ ).first()[0]
+)</code></pre>
+<h2 id="governance-and-environments">Governance and environments</h2>
+<p>Use Unity Catalog for permissions and lineage. Separate dev, staging,
+and prod catalogues or schemas. Promote code through repos and job
+definitions, not by editing production notebooks by hand. Secrets belong
+in secret scopes, never in cells.</p>
+<h2 id="design-for-change">Design for change</h2>
+<p>Sources evolve. Version schemas thoughtfully, prefer additive
+columns, and document breaking changes. Keep visualisation and BI tools
+pointed at gold views so you can rearrange physical tables without
+breaking every dashboard.</p>
+<p>Good Databricks pipelines are boring in the best way: incremental,
+tested, observable, and layered. When those habits are in place,
+modelling and analytics work can move quickly without sacrificing
+trust.</p>
+</body>
+</html>

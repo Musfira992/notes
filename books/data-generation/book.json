@@ -1,0 +1,12 @@
+{
+  "title": "Data Generation Techniques",
+  "subtitle": "Laboratory assays that produce biological data",
+  "description": "Laboratory primers on extraction, PCR, gels, western blotting, and recombinant DNA, written for people who use the data those methods produce.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}

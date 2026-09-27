@@ -1,0 +1,12 @@
+{
+  "title": "Software Engineering for Bioinformatics",
+  "subtitle": "Engineering habits for trustworthy scientific software",
+  "description": "Practical notes on Git, UNIX, maintainable Python, Julia, reliable data products, and the engineering ideas that keep bioinformatics work reproducible.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}
