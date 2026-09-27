@@ -1,6 +1,6 @@
 {
-  "title": "Musfira Jamil - Learning Notes",
-  "description": "Technical notes and primers across genomics, Databricks, software engineering, statistics, and lab techniques.",
+  "title": "Technical Notes",
+  "description": "A library of five handbooks of learning notes and primers: genomics, Databricks, software engineering for bioinformatics, statistics, and data generation techniques.",
   "author": "Musfira Jamil",
   "language": "en",
   "root": ".",

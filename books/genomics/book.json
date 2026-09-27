@@ -1,0 +1,12 @@
+{
+  "title": "Genomics",
+  "subtitle": "Reading DNA and interpreting sequence models",
+  "description": "Primers on reading a DNA sequence, and on interpreting genomic sequence models with DeepLIFT and DeepExplainer.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}

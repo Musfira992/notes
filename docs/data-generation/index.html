@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Musfira Jamil" />
+  <meta name="dcterms.date" content="2026-09-27" />
+  <title>Data Generation Techniques</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Data Generation Techniques</h1>
+<p class="subtitle">Laboratory assays that produce biological data</p>
+<p class="author">Musfira Jamil</p>
+<p class="date">2026-09-27</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#dnarna-extraction" id="toc-dnarna-extraction">DNA/RNA
+Extraction</a>
+<ul>
+<li><a href="#what-extraction-actually-means"
+id="toc-what-extraction-actually-means">What “extraction” actually
+means</a></li>
+<li><a href="#dna-versus-rna-related-goals-different-hazards"
+id="toc-dna-versus-rna-related-goals-different-hazards">DNA versus RNA:
+related goals, different hazards</a></li>
+<li><a href="#common-chemistries-conceptual"
+id="toc-common-chemistries-conceptual">Common chemistries
+(conceptual)</a></li>
+<li><a href="#quality-checks-that-actually-matter"
+id="toc-quality-checks-that-actually-matter">Quality checks that
+actually matter</a></li>
+<li><a href="#practical-mindset" id="toc-practical-mindset">Practical
+mindset</a></li>
+<li><a href="#takeaway" id="toc-takeaway">Takeaway</a></li>
+</ul></li>
+<li><a href="#protein-extraction" id="toc-protein-extraction">Protein
+Extraction</a>
+<ul>
+<li><a href="#goals-of-a-protein-extract"
+id="toc-goals-of-a-protein-extract">Goals of a protein extract</a></li>
+<li><a href="#lysis-and-homogenisation"
+id="toc-lysis-and-homogenisation">Lysis and homogenisation</a></li>
+<li><a href="#clarification-and-quantification"
+id="toc-clarification-and-quantification">Clarification and
+quantification</a></li>
+<li><a href="#stability-and-storage"
+id="toc-stability-and-storage">Stability and storage</a></li>
+<li><a href="#how-this-connects-to-data-work"
+id="toc-how-this-connects-to-data-work">How this connects to data
+work</a></li>
+<li><a href="#takeaway-1" id="toc-takeaway-1">Takeaway</a></li>
+</ul></li>
+<li><a href="#western-blotting" id="toc-western-blotting">Western
+Blotting</a>
+<ul>
+<li><a href="#the-logic-of-the-assay"
+id="toc-the-logic-of-the-assay">The logic of the assay</a></li>
+<li><a href="#transfer-and-membrane"
+id="toc-transfer-and-membrane">Transfer and membrane</a></li>
+<li><a href="#blocking-antibodies-and-wash-discipline"
+id="toc-blocking-antibodies-and-wash-discipline">Blocking, antibodies,
+and wash discipline</a></li>
+<li><a href="#what-semi-quantitative-really-means"
+id="toc-what-semi-quantitative-really-means">What “semi-quantitative”
+really means</a></li>
+<li><a href="#reading-blots-as-a-data-person"
+id="toc-reading-blots-as-a-data-person">Reading blots as a data
+person</a></li>
+<li><a href="#takeaway-2" id="toc-takeaway-2">Takeaway</a></li>
+</ul></li>
+<li><a href="#pcr" id="toc-pcr">PCR</a>
+<ul>
+<li><a href="#the-central-idea" id="toc-the-central-idea">The central
+idea</a></li>
+<li><a href="#ingredients-in-conceptual-form"
+id="toc-ingredients-in-conceptual-form">Ingredients in conceptual
+form</a></li>
+<li><a href="#what-the-thermocycler-is-doing"
+id="toc-what-the-thermocycler-is-doing">What the thermocycler is
+doing</a></li>
+<li><a href="#qpcr-and-rt-pcr-in-one-breath"
+id="toc-qpcr-and-rt-pcr-in-one-breath">qPCR and RT-PCR in one
+breath</a></li>
+<li><a href="#failure-modes-worth-recognising"
+id="toc-failure-modes-worth-recognising">Failure modes worth
+recognising</a></li>
+<li><a href="#takeaway-3" id="toc-takeaway-3">Takeaway</a></li>
+</ul></li>
+<li><a href="#agarose-gel-electrophoresis"
+id="toc-agarose-gel-electrophoresis">Agarose Gel Electrophoresis</a>
+<ul>
+<li><a href="#why-molecules-move" id="toc-why-molecules-move">Why
+molecules move</a></li>
+<li><a href="#gel-percentage-and-resolution"
+id="toc-gel-percentage-and-resolution">Gel percentage and
+resolution</a></li>
+<li><a href="#loading-ladders-and-dyes"
+id="toc-loading-ladders-and-dyes">Loading, ladders, and dyes</a></li>
+<li><a href="#what-you-learn-from-a-gel"
+id="toc-what-you-learn-from-a-gel">What you learn from a gel</a></li>
+<li><a href="#practical-tips-that-save-afternoons"
+id="toc-practical-tips-that-save-afternoons">Practical tips that save
+afternoons</a></li>
+<li><a href="#takeaway-4" id="toc-takeaway-4">Takeaway</a></li>
+</ul></li>
+<li><a href="#sds-page-cloning-and-recombinant-dna-technology"
+id="toc-sds-page-cloning-and-recombinant-dna-technology">SDS-PAGE,
+Cloning, and Recombinant DNA Technology</a>
+<ul>
+<li><a href="#sds-page-proteins-sorted-by-size"
+id="toc-sds-page-proteins-sorted-by-size">SDS-PAGE: proteins sorted by
+size</a></li>
+<li><a href="#cloning-putting-a-sequence-where-you-want-it"
+id="toc-cloning-putting-a-sequence-where-you-want-it">Cloning: putting a
+sequence where you want it</a></li>
+<li><a href="#recombinant-dna-technology-as-a-toolkit"
+id="toc-recombinant-dna-technology-as-a-toolkit">Recombinant DNA
+technology as a toolkit</a></li>
+<li><a href="#how-the-three-connect-in-a-project-story"
+id="toc-how-the-three-connect-in-a-project-story">How the three connect
+in a project story</a></li>
+<li><a href="#takeaway-5" id="toc-takeaway-5">Takeaway</a></li>
+</ul></li>
+</ul>
+</nav>
+<p>Laboratory primers on extraction, PCR, gels, western blotting, and
+recombinant DNA, written for people who use the data those methods
+produce.</p>
+<p>These chapters started as learning notes and primers.</p>
+<p><a href="../index.html" class="handbook-link">Notes library</a></p>
+<h1 id="dnarna-extraction">DNA/RNA Extraction</h1>
+<p><em>A practical primer on DNA and RNA extraction: lysis, separation,
+and cleanup; why plant tissues and RNA need extra care; and which
+quality checks actually protect PCR and sequencing downstream.</em></p>
+<p>Almost every nucleic-acid assay begins the same way: get clean DNA or
+RNA out of a messy biological sample. Extraction is not glamorous, but
+it decides whether downstream PCR, sequencing, or qPCR will be
+trustworthy. This primer covers the <em>ideas</em> behind DNA and RNA
+extraction, what you are trying to separate, why protocols differ, and
+how quality is judged, from the perspective of someone who has worked
+with plant and lab material and now mostly thinks about the data those
+extracts produce.</p>
+<h2 id="what-extraction-actually-means">What “extraction” actually
+means</h2>
+<p>Cells are packed with proteins, lipids, polysaccharides, and
+metabolites. Nucleic acids must be released from nuclei (and, for plants
+and many microbes, tough cell walls), then separated from inhibitors
+that wreck enzymes later. Broadly, workflows share three stages:</p>
+<ol type="1">
+<li><strong>Lysis</strong>, break open cells and, if needed, walls or
+tissue matrix.</li>
+<li><strong>Separation</strong>, partition DNA or RNA away from proteins
+and debris.</li>
+<li><strong>Cleanup and elution</strong>, wash away salts and solvents,
+recover nucleic acids in a stable buffer.</li>
+</ol>
+<p>Spin-column kits, magnetic beads, and classical organic extractions
+all implement those stages with different chemistries. The biology of
+the sample (leaf, blood, cultured cells, soil) often matters more than
+the brand name on the box.</p>
+<h2 id="dna-versus-rna-related-goals-different-hazards">DNA versus RNA:
+related goals, different hazards</h2>
+<p>DNA is relatively hardy. RNA is not. Ubiquitous RNases degrade
+transcripts quickly, so RNA work emphasises RNase awareness, cold
+handling where appropriate, and often dedicated reagents. DNA
+preparations may intentionally include RNase to remove RNA; RNA
+preparations may include DNase to remove genomic DNA that would
+otherwise inflate qPCR signals.</p>
+<p>Plant tissues add another layer: secondary metabolites, polyphenols,
+and polysaccharides can co-purify and inhibit polymerases. That is why
+plant protocols often include PVPP, high-salt or CTAB-style steps, or
+specialised kits, not because DNA chemistry changes, but because the
+matrix does.</p>
+<h2 id="common-chemistries-conceptual">Common chemistries
+(conceptual)</h2>
+<ul>
+<li><strong>Silica columns</strong>, Under chaotropic conditions,
+DNA/RNA bind silica; washes remove contaminants; low-salt or water
+elutes the nucleic acid. Fast and popular for routine work.</li>
+<li><strong>Magnetic beads</strong>, Similar bind-wash-elute logic, but
+beads enable automation and flexible volume scaling.</li>
+<li><strong>Organic extraction</strong>, Phenol-chloroform (and
+variants) partition proteins into organic or interphase layers; aqueous
+nucleic acids are precipitated. Powerful, but more handling and safety
+overhead.</li>
+<li><strong>Precipitation</strong>, Alcohol and salt crash nucleic acids
+out of solution for concentration or further cleanup.</li>
+</ul>
+<h2 id="quality-checks-that-actually-matter">Quality checks that
+actually matter</h2>
+<p>Yield (ng/µL) is only half the story. Spectrophotometric ratios such
+as A260/A280 and A260/A230 give a rough purity screen: protein and
+carbohydrate/phenol contamination shift those ratios. Fluorometric dyes
+(for example PicoGreen- or Qubit-style assays) often give more reliable
+concentrations for sequencing libraries because they are more selective
+for double-stranded DNA.</p>
+<p>For RNA, integrity matters as much as quantity. Electrophoretic
+traces or RIN-style scores help flag degradation before you invest in
+expensive library prep. For both DNA and RNA, the “right” quality bar
+depends on the assay: a crude extract might support a robust PCR, while
+long-read sequencing is far less forgiving.</p>
+<h2 id="practical-mindset">Practical mindset</h2>
+<p>Think of extraction as the first filter in your experimental design.
+Inhibitors left behind become mysterious PCR failures or biased coverage
+in sequencing. Cross-contamination between samples becomes a
+bioinformatics headache that looks like biology. Labelling, blank
+controls, and consistent input amounts pay dividends later when you are
+staring at a count matrix wondering why one sample is an outlier.</p>
+<p>You do not need to memorise every buffer recipe to reason about data.
+You do need to know whether the extract was DNA or RNA, roughly how
+intact it was, and whether the protocol was appropriate for the tissue,
+because those facts travel with every downstream result.</p>
+<h2 id="takeaway">Takeaway</h2>
+<p>DNA/RNA extraction releases nucleic acids, strips away inhibitors,
+and delivers material whose purity and integrity set the ceiling for PCR
+and sequencing. Match method to tissue, respect RNA’s fragility, and
+always couple yield with a purity or integrity check before trusting the
+numbers that follow.</p>
+<h1 id="protein-extraction">Protein Extraction</h1>
+<p><em>How protein extraction works at a conceptual level, matching
+lysis and buffer chemistry to Westerns, activity assays, or
+fractionation, and why quantification and protease control shape every
+result that follows.</em></p>
+<p>Proteins are the cell’s working parts, enzymes, structural fibres,
+signalling hubs, membrane channels. Before you can measure abundance,
+activity, or size, you usually need to get them out of tissue and into a
+soluble, assay-friendly form. Protein extraction is that step:
+controlled disruption plus a buffer chemistry chosen so your target
+survives long enough to be measured.</p>
+<h2 id="goals-of-a-protein-extract">Goals of a protein extract</h2>
+<p>Unlike nucleic acids, proteins vary wildly in solubility,
+localisation, and stability. A “total protein” extract for a Western
+blot is not the same preparation you would use for a native enzyme assay
+or for membrane-protein work. Clarify the goal first:</p>
+<ul>
+<li><strong>Abundance / immunoblot</strong>, often denaturing lysis so
+most proteins dissolve and proteases are less active.</li>
+<li><strong>Activity assays</strong>, gentler, non-denaturing conditions
+that preserve fold and cofactors.</li>
+<li><strong>Subcellular fractions</strong>, differential centrifugation
+or commercial kits to enrich nuclei, cytosol, or membranes.</li>
+</ul>
+<p>Writing down the intended assay prevents the common mistake of
+boiling everything in SDS when you still needed enzymatic activity.</p>
+<h2 id="lysis-and-homogenisation">Lysis and homogenisation</h2>
+<p>Tissue must be disrupted. Cultured cells may lyse with detergent
+alone; plant leaves, seeds, or fibrous samples may need grinding (often
+in liquid nitrogen), bead beating, or other mechanical help. Cold
+processing slows proteases and accidental denaturation for native
+work.</p>
+<p>Buffers typically combine:</p>
+<ul>
+<li>a <strong>pH buffer</strong> (for example Tris or phosphate) matched
+to the protein’s comfort zone;</li>
+<li><strong>salt</strong> to support solubility;</li>
+<li><strong>detergent</strong> when membrane or hydrophobic proteins
+must be solubilised;</li>
+<li><strong>protease (and often phosphatase) inhibitors</strong> so the
+sample does not digest itself during handling;</li>
+<li>optional <strong>reducing agents</strong> or denaturants when the
+workflow is heading to SDS-PAGE.</li>
+</ul>
+<p>Plant extracts again deserve a special mention: phenolics and other
+metabolites can modify proteins or interfere with assays, so specialised
+additives or precipitation cleanups are sometimes used.</p>
+<h2 id="clarification-and-quantification">Clarification and
+quantification</h2>
+<p>After lysis, insoluble debris is usually removed by centrifugation.
+The supernatant is your working extract. Concentration is commonly
+estimated with dye-binding assays (Bradford, BCA, and similar). Those
+assays have protein-to-protein biases and detergent interferences, so
+treat them as comparative within a consistent workflow rather than
+absolute truth.</p>
+<p>Normalising load, equal micrograms per lane on a gel, or equal
+activity units, is what makes later Western or activity comparisons
+interpretable. Uneven extraction efficiency between samples is a classic
+source of fake “biological” differences.</p>
+<h2 id="stability-and-storage">Stability and storage</h2>
+<p>Proteins aggregate, oxidise, and proteolyse. Keep extracts cold when
+appropriate, aliquot to avoid freeze-thaw damage, and know whether your
+target tolerates freezing at all. For denaturing SDS-PAGE samples,
+mixing with sample buffer and heating is often done soon after
+quantification so the proteome is “frozen” in a denatured state for
+electrophoresis.</p>
+<h2 id="how-this-connects-to-data-work">How this connects to data
+work</h2>
+<p>If you later analyse densitometry, mass spectrometry, or plate-reader
+kinetics, the extraction choices are part of the metadata. Detergent
+carry-over, incomplete lysis of one genotype, or a skipped inhibitor
+tablet can look like differential expression. When reading papers or
+reviewing lab notes, ask: Was the extract total or fractionated?
+Denatured or native? How was protein quantified before the assay?</p>
+<h2 id="takeaway-1">Takeaway</h2>
+<p>Protein extraction is purposeful lysis plus buffer design: release
+the proteins you care about, protect them from proteases, and quantify
+them consistently. Match denaturing versus native conditions to the
+assay, and remember that poor extraction discipline creates artefacts
+that no amount of careful blotting or statistics can fully repair.</p>
+<h1 id="western-blotting">Western Blotting</h1>
+<p><em>Western blotting explained warmly and clearly: SDS-PAGE,
+transfer, antibodies, and detection, plus what semi-quantitative band
+intensity can and cannot tell you about protein levels.</em></p>
+<p>Western blotting is the workhorse method for asking whether a
+specific protein is present in a sample, and, semi-quantitatively,
+whether its level differs between conditions. The name “blot” refers to
+transferring proteins from a gel onto a membrane, where antibodies can
+find their target among thousands of other polypeptides.</p>
+<h2 id="the-logic-of-the-assay">The logic of the assay</h2>
+<p>A typical Western workflow has four conceptual acts:</p>
+<ol type="1">
+<li><strong>Separate</strong> proteins by size using SDS-PAGE (see also
+the SDS-PAGE primer in this series).</li>
+<li><strong>Transfer</strong> the separated proteins onto a membrane
+(usually nitrocellulose or PVDF).</li>
+<li><strong>Probe</strong> with a primary antibody that recognises the
+target, then a labelled secondary antibody.</li>
+<li><strong>Detect</strong> the label, historically film with enhanced
+chemiluminescence, nowadays often digital imagers or fluorescent
+secondaries.</li>
+</ol>
+<p>Specificity comes from the antibody, not from the gel. The gel only
+sorts by approximate molecular weight so you can check that the band
+sits near the expected size.</p>
+<h2 id="transfer-and-membrane">Transfer and membrane</h2>
+<p>After electrophoresis, proteins are driven onto the membrane by an
+electric field (wet, semi-dry, or related transfer systems). The
+membrane binds proteins non-specifically, creating a replica of the gel
+pattern. Incomplete transfer of large proteins, over-transfer of small
+ones, or air bubbles can create missing or patchy bands, another reason
+loading controls and membrane stains (Ponceau S, for example) are useful
+sanity checks.</p>
+<h2 id="blocking-antibodies-and-wash-discipline">Blocking, antibodies,
+and wash discipline</h2>
+<p>Before antibodies go on, the membrane is <strong>blocked</strong>
+with a protein solution (milk or BSA are common) so antibodies do not
+stick everywhere. Primary antibody incubation allows specific binding;
+washes remove unbound antibody; secondary antibody recognises the
+primary and carries the detection enzyme or fluorophore.</p>
+<p>Most artefacts live in this stage: too much antibody yields
+background smear; too little yields invisibility; poor washing leaves
+speckles; wrong secondary species yields nothing. Antibody validation,
+does it see the right size? Does a knockout or knockdown abolish the
+band?, is the difference between a pretty picture and a credible
+result.</p>
+<h2 id="what-semi-quantitative-really-means">What “semi-quantitative”
+really means</h2>
+<p>Westerns are excellent for presence/absence and rough fold changes
+within a carefully controlled blot. They are weaker as absolute
+quantitation. Detection chemistries saturate; transfer efficiency varies
+across the membrane; antibody affinity is nonlinear. Good practice
+includes:</p>
+<ul>
+<li>a <strong>loading control</strong> (a housekeeping protein or
+total-protein stain) to normalise lane input;</li>
+<li>avoiding overexposed bands when comparing intensity;</li>
+<li>biological replicates, not just technical reloads of one
+extract;</li>
+<li>reporting molecular-weight markers and expected sizes.</li>
+</ul>
+<p>Phospho-specific antibodies add a further twist: they report a
+modified subpopulation, so total protein controls for that target matter
+when interpreting signalling changes.</p>
+<h2 id="reading-blots-as-a-data-person">Reading blots as a data
+person</h2>
+<p>When you inherit densitometry spreadsheets or published figures, ask
+what was normalised, whether lanes were cropped from the same membrane,
+and whether the antibody had orthogonal validation. Cropping and
+contrast adjustments are normal for display but should not invent bands.
+If you are modelling treatment effects from quantified bands, treat the
+intensities as assay readouts with clear batch structure (each membrane
+is a batch).</p>
+<h2 id="takeaway-2">Takeaway</h2>
+<p>Western blotting separates proteins, moves them to a membrane, and
+uses antibodies to reveal a target band. It is powerful for specific
+detection and cautious comparison, provided transfer, blocking, antibody
+choice, and loading controls are taken seriously. Treat band intensity
+as semi-quantitative evidence, not as a mass-spectrometer
+substitute.</p>
+<h1 id="pcr">PCR</h1>
+<p><em>A clear primer on the polymerase chain reaction: denature,
+anneal, extend; primer design and annealing temperature; and the failure
+modes that show up on gels and in qPCR curves.</em></p>
+<p>PCR, the polymerase chain reaction, is the method that taught
+molecular biology to copy DNA on demand. From genotyping and cloning to
+library preparation for sequencing, PCR (and its quantitative cousin
+qPCR) sits underneath an enormous fraction of modern biology and
+diagnostics. This primer focuses on the core idea, the cycle, and the
+practical knobs that decide success or failure.</p>
+<h2 id="the-central-idea">The central idea</h2>
+<p>DNA polymerase synthesises a new strand using an existing strand as
+template. PCR weaponises that reaction by:</p>
+<ul>
+<li>supplying <strong>two primers</strong> that flank the region you
+want to amplify;</li>
+<li>using heat to <strong>denature</strong> double-stranded DNA each
+cycle;</li>
+<li>allowing primers to <strong>anneal</strong> at a lower
+temperature;</li>
+<li>letting a heat-stable polymerase <strong>extend</strong> from those
+primers;</li>
+<li>repeating the cycle so that, in the ideal exponential phase, product
+roughly doubles each round.</li>
+</ul>
+<p>After 25-35 cycles, even a few starting template molecules can yield
+enough product to see on a gel, clone, or sequence. That sensitivity is
+the method’s power and its contamination risk.</p>
+<h2 id="ingredients-in-conceptual-form">Ingredients in conceptual
+form</h2>
+<p>A basic reaction mixes template DNA, forward and reverse primers,
+dNTPs (the nucleotide building blocks), buffer with magnesium, and a
+thermostable polymerase (Taq and engineered variants are common). Primer
+design is half the battle: primers should be specific to the target,
+similar in melting temperature, and free of strong self-complementarity
+that creates primer-dimers.</p>
+<p>Magnesium concentration, annealing temperature, and extension time
+are the usual tuning parameters. Too-low annealing temperature invites
+off-target bands; too-high yields no product. Extension time scales with
+amplicon length and polymerase speed.</p>
+<h2 id="what-the-thermocycler-is-doing">What the thermocycler is
+doing</h2>
+<p>Each cycle is a timed temperature programme. Early cycles are
+precious: if primers mis-prime when template is scarce, those errors get
+amplified. Hot-start polymerases reduce activity until a
+high-temperature activation step, cutting down on non-specific products
+formed during setup.</p>
+<p>After amplification, products are often checked by agarose gel
+electrophoresis (size and purity) or used directly in downstream
+enzymatic steps. Nested PCR, touchdown PCR, and long-range PCR are
+variations on the same denature-anneal-extend theme for harder
+templates.</p>
+<h2 id="qpcr-and-rt-pcr-in-one-breath">qPCR and RT-PCR in one
+breath</h2>
+<p><strong>qPCR</strong> monitors product accumulation each cycle with
+fluorescence, enabling relative (and, with standards, absolute)
+quantification. <strong>RT-PCR</strong> starts from RNA: reverse
+transcriptase makes complementary DNA (cDNA), then PCR amplifies it, the
+backbone of many gene-expression assays. Neither changes the core logic;
+they add enzymes and detection chemistry upstream or during cycling.</p>
+<h2 id="failure-modes-worth-recognising">Failure modes worth
+recognising</h2>
+<ol type="1">
+<li><strong>No band</strong>, bad primers, degraded template, wrong
+annealing temperature, missing polymerase or Mg²⁺, or inhibitors from
+extraction.</li>
+<li><strong>Extra bands</strong>, non-specific priming; raise annealing
+temperature, redesign primers, or use hot-start enzyme.</li>
+<li><strong>Primer-dimer smear at low molecular weight</strong>, primers
+preferring each other over template.</li>
+<li><strong>Contamination</strong>, amplified product from a previous
+run seeding new reactions; negative controls are non-negotiable.</li>
+</ol>
+<h2 id="takeaway-3">Takeaway</h2>
+<p>PCR amplifies a chosen DNA interval by cycling denaturation, primer
+annealing, and polymerase extension. Primer design, annealing
+temperature, and clean template determine whether you get a crisp
+specific product or a mess. Understand those levers and you can
+interpret gels, qPCR curves, and sequencing libraries with far less
+mystery.</p>
+<h1 id="agarose-gel-electrophoresis">Agarose Gel Electrophoresis</h1>
+<p><em>How agarose gels separate DNA and RNA by size, how to read
+ladders and bands, and why this simple QC step still anchors PCR,
+digests, and nucleic-acid integrity checks.</em></p>
+<p>Agarose gel electrophoresis is how molecular biologists “see” DNA and
+RNA fragments. You load samples into a gel, apply a voltage, and watch
+nucleic acids migrate so that smaller fragments travel farther. Bands
+illuminated with a DNA-binding dye become a simple, visual size
+distribution, still one of the most useful QC checks in any cloning or
+PCR workflow.</p>
+<h2 id="why-molecules-move">Why molecules move</h2>
+<p>At neutral pH, DNA and RNA carry a negative charge on their phosphate
+backbone, so they migrate toward the positive electrode. Agarose forms a
+porous mesh; larger fragments thread through more slowly. Within the
+useful range of a given gel percentage, migration distance relates to
+the logarithm of fragment length for linear DNA, which is why a ladder
+of known sizes lets you interpolate unknowns.</p>
+<h2 id="gel-percentage-and-resolution">Gel percentage and
+resolution</h2>
+<p>Lower percentage agarose (for example ~0.7-1%) resolves larger
+fragments better; higher percentage gels tighten resolution for small
+PCR products. Very large genomic DNA and very small oligos sit at
+opposite edges of what a standard slab gel can do well, pulsed-field or
+polyacrylamide methods take over outside that window.</p>
+<p>Buffer systems (TAE or TBE are common) maintain pH and provide ions
+for current. Voltage is a compromise: higher voltage is faster but can
+heat the gel and reduce resolution or distort bands.</p>
+<h2 id="loading-ladders-and-dyes">Loading, ladders, and dyes</h2>
+<p>Samples are mixed with loading dye for density (so they sink into
+wells) and tracking dyes that migrate at characteristic rates. A
+molecular-weight <strong>ladder</strong> in a neighbouring lane is
+essential for size estimates. Intercalating or groove-binding stains
+make bands visible under the appropriate light; modern stains are often
+safer than older ethidium bromide workflows, but all DNA-binding dyes
+deserve respect and proper disposal.</p>
+<p>RNA gels and denaturing conditions are used when secondary structure
+would otherwise blur size interpretation, a reminder that “a band on a
+gel” always depends on the nucleic acid’s conformation and the buffer
+chemistry.</p>
+<h2 id="what-you-learn-from-a-gel">What you learn from a gel</h2>
+<ul>
+<li><strong>Did PCR work?</strong> A band at the expected size is
+encouraging; multiple bands suggest non-specificity.</li>
+<li><strong>Is the digest complete?</strong> Restriction digests should
+shift plasmid bands to predicted fragment sizes.</li>
+<li><strong>Is RNA intact?</strong> Distinct ribosomal RNA bands (in
+eukaryotic total RNA) versus a low-molecular-weight smear tell different
+stories.</li>
+<li><strong>Is the prep contaminated with genomic DNA?</strong>
+High-molecular-weight material in an RNA prep can be a warning.</li>
+</ul>
+<p>Gels are qualitative to semi-quantitative. Band brightness scales
+roughly with mass, but staining saturation and imaging settings make
+densitometry approximate.</p>
+<h2 id="practical-tips-that-save-afternoons">Practical tips that save
+afternoons</h2>
+<p>Include a no-template PCR control and run it on the same gel. Do not
+overload wells, smiling or smeared bands often mean too much DNA or too
+much salt. If a band is needed for cloning, minimise UV exposure when
+excising, because UV damages DNA. Document ladder identity and gel
+percentage in your notes; a photo without that context is hard to
+reinterpret months later.</p>
+<h2 id="takeaway-4">Takeaway</h2>
+<p>Agarose gel electrophoresis separates nucleic acids by size in an
+electric field through a porous gel. With a ladder, appropriate agarose
+percentage, and sensible staining, it remains the fastest reality check
+for PCR, digests, and nucleic-acid integrity, a visual bridge between
+the bench and every dataset that depends on clean amplicons or intact
+RNA.</p>
+<h1 id="sds-page-cloning-and-recombinant-dna-technology">SDS-PAGE,
+Cloning, and Recombinant DNA Technology</h1>
+<p><em>An introductory tour linking SDS-PAGE, molecular cloning, and
+recombinant DNA tools, the build-and-verify loop from construct design
+to protein bands on a gel.</em></p>
+<p>Three laboratory pillars often appear together in molecular cloning
+projects: <strong>SDS-PAGE</strong> to inspect proteins,
+<strong>cloning</strong> to move a DNA fragment into a new context, and
+<strong>recombinant DNA technology</strong> as the broader toolkit that
+makes that move possible. This primer ties them together at an
+introductory level, how the pieces relate, not a bench SOP.</p>
+<h2 id="sds-page-proteins-sorted-by-size">SDS-PAGE: proteins sorted by
+size</h2>
+<p>SDS-PAGE (sodium dodecyl sulphate-polyacrylamide gel electrophoresis)
+denatures proteins and coats them with SDS so charge-to-mass ratios
+become similar. In a polyacrylamide mesh under an electric field,
+polypeptides then separate primarily by molecular weight. Discontinuous
+buffer systems (stacking and resolving gels) sharpen bands before
+sieving begins.</p>
+<p>You run SDS-PAGE to check expression of a recombinant protein, purity
+after chromatography, or input quality before a Western blot. Coomassie
+or silver stains visualise many proteins at once; immunoblots visualise
+one target with antibodies. As with DNA gels, a ladder anchors size
+estimates, and overloaded lanes create misleading smears.</p>
+<p>Reducing agents (such as DTT or β-mercaptoethanol) in sample buffer
+break disulphide bonds so multisubunit proteins report as individual
+chains, important when interpreting unexpected band sizes.</p>
+<h2 id="cloning-putting-a-sequence-where-you-want-it">Cloning: putting a
+sequence where you want it</h2>
+<p>Molecular cloning inserts a DNA fragment of interest into a
+<strong>vector</strong> (often a plasmid) that can replicate in a host
+such as <em>E. coli</em>. Classic steps include:</p>
+<ol type="1">
+<li>obtain the insert (PCR or restriction fragments from a source
+DNA);</li>
+<li>open the vector (restriction enzymes or linearisation for
+homology-based methods);</li>
+<li>join insert and vector (ligase for sticky/blunt ends, or seamless
+assembly chemistries);</li>
+<li>transform into competent cells and select colonies with antibiotic
+or other markers;</li>
+<li>screen colonies (colony PCR, restriction diagnostic digests, or
+sequencing).</li>
+</ol>
+<p>Modern Gibson-style and Golden Gate assemblies change the enzymatic
+details but not the goal: a verified recombinant molecule that carries
+your sequence under controlled promoters, tags, or resistance
+markers.</p>
+<h2 id="recombinant-dna-technology-as-a-toolkit">Recombinant DNA
+technology as a toolkit</h2>
+<p>“Recombinant DNA” simply means DNA combined from different sources.
+The enabling tools include restriction endonucleases, DNA ligase, PCR,
+reverse transcription for cDNA clones, site-directed mutagenesis, and
+ever-cheaper Sanger or NGS verification. Expression constructs then link
+cloning to protein work: induce expression in bacteria, yeast, or other
+hosts, lyse cells, and use SDS-PAGE (and Westerns) to ask whether the
+protein appeared at the expected size.</p>
+<p>In plant biology and agricultural biotechnology, the same logic
+underpins transgenic and transient-expression constructs, even when
+delivery uses Agrobacterium or biolistics rather than a simple
+heat-shock plasmid transformation. The recombinant molecule is still
+designed, built, and verified with the same conceptual checklist.</p>
+<h2 id="how-the-three-connect-in-a-project-story">How the three connect
+in a project story</h2>
+<p>A common narrative runs: design primers → PCR amplify a coding
+sequence → clone into an expression vector → transform and induce →
+extract protein → run SDS-PAGE / Western to confirm expression → assay
+function. Failures cascade: a wrong PCR product yields a wrong clone; a
+frameshift yields no band at the expected size; inclusion bodies may
+show protein on a gel but no activity in native assays.</p>
+<p>From a data perspective, sequencing chromatograms, colony-PCR gels,
+and annotated plasmid maps are first-class QC artefacts. Protein gels
+and blot images are experimental readouts with batch effects (each gel
+is a batch). Keeping those links explicit makes troubleshooting faster
+than staring at a single disappointing band in isolation.</p>
+<h2 id="takeaway-5">Takeaway</h2>
+<p>SDS-PAGE separates denatured proteins by size; cloning assembles
+inserts into selectable vectors; recombinant DNA technology is the
+enzyme-and-host toolkit that enables both gene construction and
+subsequent protein checks. Together they form the classic
+build-and-verify loop of molecular biology, design the DNA, confirm the
+construct, then ask whether the protein product looks right on a
+gel.</p>
+</body>
+</html>

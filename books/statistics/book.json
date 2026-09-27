@@ -1,0 +1,12 @@
+{
+  "title": "Statistics",
+  "subtitle": "Exploratory analysis and data visualisation",
+  "description": "Primers on exploratory data analysis and the craft of data visualisation.",
+  "author": "Musfira Jamil",
+  "language": "en",
+  "root": ".",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  }
+}
