@@ -23,6 +23,70 @@
       vertical-align: middle;
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../styles.css" />
 </head>
@@ -118,6 +182,24 @@ id="toc-shell-hygiene-that-saves-weekends">Shell hygiene that saves
 weekends</a></li>
 <li><a href="#closing-thought" id="toc-closing-thought">Closing
 thought</a></li>
+</ul></li>
+<li><a href="#command-line-essentials"
+id="toc-command-line-essentials">Command Line Essentials</a>
+<ul>
+<li><a href="#quick-reference" id="toc-quick-reference">Quick
+reference</a></li>
+<li><a href="#general-structure-of-a-linux-command"
+id="toc-general-structure-of-a-linux-command">General structure of a
+Linux command</a></li>
+<li><a href="#file-and-directory-navigation"
+id="toc-file-and-directory-navigation">File and directory
+navigation</a></li>
+<li><a href="#file-management" id="toc-file-management">File
+management</a></li>
+<li><a href="#viewing-and-searching-file-contents"
+id="toc-viewing-and-searching-file-contents">Viewing and searching file
+contents</a></li>
+<li><a href="#glossary" id="toc-glossary">Glossary</a></li>
 </ul></li>
 <li><a href="#git-essentials" id="toc-git-essentials">Git Essentials</a>
 <ul>
@@ -514,6 +596,332 @@ use.</li>
 above deeply, composition, compression, inspection, and search, and you
 will spend less time fighting files and more time analysing them.
 Everything else can be looked up as needed.</p>
+<h1 id="command-line-essentials">Command Line Essentials</h1>
+<p><em>A beginner reference for navigating, managing, viewing, and
+searching files from the terminal, with bioinformatics
+examples.</em></p>
+<p>File management is one of the first things you’ll do in the command
+line, whether you’re organizing scripts, moving sequencing data, or
+setting up analysis folders. These commands help you navigate and
+manipulate files efficiently.</p>
+<h2 id="quick-reference">Quick reference</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pwd</code></td>
+<td>Show current directory path</td>
+</tr>
+<tr class="even">
+<td><code>ls</code></td>
+<td>List files and directories</td>
+</tr>
+<tr class="odd">
+<td><code>cd</code></td>
+<td>Change directory</td>
+</tr>
+<tr class="even">
+<td><code>touch</code></td>
+<td>Create empty files</td>
+</tr>
+<tr class="odd">
+<td><code>mkdir</code></td>
+<td>Create directories</td>
+</tr>
+<tr class="even">
+<td><code>cp</code></td>
+<td>Copy files or directories</td>
+</tr>
+<tr class="odd">
+<td><code>mv</code></td>
+<td>Move or rename files or directories</td>
+</tr>
+<tr class="even">
+<td><code>rm</code></td>
+<td>Remove files or directories</td>
+</tr>
+<tr class="odd">
+<td><code>cat</code></td>
+<td>View or concatenate files</td>
+</tr>
+<tr class="even">
+<td><code>grep</code></td>
+<td>Search for a text pattern within a file or output</td>
+</tr>
+<tr class="odd">
+<td><code>head</code> and <code>tail</code></td>
+<td>View the top and bottom of a file</td>
+</tr>
+<tr class="even">
+<td><code>less</code></td>
+<td>View a file one page at a time</td>
+</tr>
+<tr class="odd">
+<td><code>man</code></td>
+<td>Show a command’s manual</td>
+</tr>
+</tbody>
+</table>
+<h2 id="general-structure-of-a-linux-command">General structure of a
+Linux command</h2>
+<p><strong>1. The command: the “what”</strong></p>
+<p>The command is the name of the program or tool you want to run. It
+represents the action you want to take.</p>
+<ul>
+<li><strong>Examples:</strong> <code>ls</code> (list files),
+<code>rm</code> (remove), or <code>mkdir</code> (make directory).</li>
+</ul>
+<p><strong>2. Options: the “how”</strong></p>
+<p>Options (also called flags) modify how the command behaves. They
+allow you to tweak the output or the intensity of the action. They
+usually start with a single dash (<code>-</code>) for the short form or
+two dashes (<code>--</code>) for full words.</p>
+<ul>
+<li><strong>Example:</strong> <code>ls -l</code>. Here, <code>-l</code>
+tells the computer to show the list in “long” format, giving you extra
+details like file size and modification date.</li>
+</ul>
+<p>Use <code>man [command]</code> (manual) or
+<code>[command] --help</code> to find every available option for a given
+command.</p>
+<p><strong>3. Arguments: the “target”</strong></p>
+<p>The argument is the subject of your command. It tells the program
+what it should act on, such as a specific file, a folder, or a path.</p>
+<ul>
+<li><strong>Example:</strong> <code>mkdir Projects</code>. Here,
+<code>mkdir</code> is the command, and <code>Projects</code> is the
+argument: the name of the folder you want to create.</li>
+</ul>
+<p>Some commands require at least one argument
+(e.g. <code>mkdir Projects</code>), while others don’t need any at all
+(e.g. <code>cd</code>).</p>
+<p><strong>Cancelling a command:</strong> press <code>Ctrl + C</code> to
+cancel a running command.</p>
+<h2 id="file-and-directory-navigation">File and directory
+navigation</h2>
+<h3 id="pwd-print-working-directory">1. <code>pwd</code>: print working
+directory</h3>
+<p>Displays the full path of your current location.</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># /home/user/projects/genomics</span></span></code></pre></div>
+<p><strong>Important consideration:</strong> this is especially useful
+when writing scripts or running pipelines, so you always know where
+files are being read from or saved to.</p>
+<h3 id="ls-list-files-and-directories">2. <code>ls</code>: list files
+and directories</h3>
+<p>Lists the files and folders in the current directory.</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span></span></code></pre></div>
+<p>Common useful options:</p>
+<ul>
+<li><code>ls -l</code>: long format, including permissions, size, owner,
+and modification date</li>
+<li><code>ls -a</code>: shows hidden files (files starting with
+<code>.</code>)</li>
+<li><code>ls -lh</code>: human-readable file sizes (KB, MB, GB)</li>
+</ul>
+<p><strong>Important consideration:</strong> hidden files (like
+<code>.bashrc</code> or <code>.config</code>) often store system or
+environment settings, so <code>ls -a</code> is useful when
+troubleshooting or configuring tools.</p>
+<h3 id="cd-change-directory">3. <code>cd</code>: change directory</h3>
+<p>Moves you between folders.</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="pp">[</span><span class="ss">directory_path</span><span class="pp">]</span></span></code></pre></div>
+<p>Basic navigation:</p>
+<ul>
+<li><code>cd ~</code>: goes to your home directory (the base folder for
+your user)</li>
+<li><code>cd /</code>: moves to the root directory (the very top of the
+entire system)</li>
+<li><code>cd ..</code>: moves one level up</li>
+<li><code>cd -</code>: takes you back to the directory you were just in
+(like a “back” button)</li>
+</ul>
+<p><strong>Relative vs. absolute paths:</strong></p>
+<ul>
+<li><code>cd folder_name</code>: moves down into a folder inside your
+current location</li>
+<li><code>cd ../..</code>: moves up two levels at once</li>
+<li><code>cd ~/Desktop/Project</code>: jumps directly to a specific
+folder, regardless of where you are starting from</li>
+</ul>
+<p><strong>Important consideration:</strong> most bioinformatics
+workflows involve moving through nested folders (raw data → processed
+data → results), so mastering <code>cd</code> is essential for not
+getting “lost” in directory structures.</p>
+<h2 id="file-management">File management</h2>
+<h3 id="touch-create-empty-files">4. <code>touch</code>: create empty
+files</h3>
+<p>Creates a new empty file.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Best practices for naming files and folders.</strong> Follow
+these conventions to avoid data loss and syntax errors:</p>
+<ul>
+<li><strong>Stick to lowercase:</strong> most shell commands are
+lowercase, so you won’t have to keep toggling Caps Lock. This also
+avoids confusion on case-insensitive systems like Windows and (by
+default) macOS, where <code>File.txt</code> and <code>file.txt</code>
+are the same item.</li>
+<li><strong>Limit your characters:</strong> stick to letters, numbers,
+underscores (<code>_</code>), and hyphens (<code>-</code>).</li>
+<li><strong>Avoid spaces:</strong> spaces need “escaping” in the
+terminal, which makes commands clunky. Use an underscore or hyphen
+instead (e.g. <code>my_project</code> instead of
+<code>my project</code>).</li>
+<li><strong>Use standard extensions:</strong> always include a clear
+file extension (like <code>.txt</code> or <code>.sh</code>) so both you
+and the system know what the file is.</li>
+</ul>
+<h3 id="mkdir-create-directories">5. <code>mkdir</code>: create
+directories</h3>
+<p>Creates new folders.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="pp">[</span><span class="ss">folder_name</span><span class="pp">]</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="pp">[</span><span class="ss">directory_path</span><span class="pp">]</span>   <span class="co"># create nested directories</span></span></code></pre></div>
+<p><strong>Example:</strong>
+<code>mkdir -p project/raw_data/fastq_files</code></p>
+<p><strong>Important consideration:</strong> <code>-p</code> is short
+for “parents”. It tells the system to create any missing parent folders
+in the path. Without it, the command would fail if <code>project</code>
+or <code>raw_data</code> didn’t already exist. This is very useful in
+bioinformatics, where projects often need deeply nested directories for
+raw data, scripts, results, and metadata.</p>
+<h3 id="cp-copy-files-or-directories">6. <code>cp</code>: copy files or
+directories</h3>
+<p>Copies a file to a new name, or into another folder.</p>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> source destination</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> file.txt new_file.txt</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> file.txt /home/user/backup/</span></code></pre></div>
+<p>Common useful options:</p>
+<ul>
+<li><code>-r</code> (recursive): copies an entire folder and all its
+contents, e.g. <code>cp -r Projects/ Backup</code></li>
+<li><code>-i</code> (interactive): asks before overwriting an existing
+file, e.g. <code>cp -i file.txt destination/</code></li>
+<li><code>-v</code> (verbose): shows exactly what is being copied,
+e.g. <code>cp -v file.txt backup/</code></li>
+</ul>
+<p><strong>Important consideration:</strong> always double-check
+destination paths. Unlike a graphical interface, the command line will
+not ask for confirmation in most cases.</p>
+<h3 id="mv-move-or-rename-files">7. <code>mv</code>: move or rename
+files</h3>
+<p>Used for both moving and renaming.</p>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> oldname.txt newname.txt          <span class="co"># rename</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> file.txt /home/user/Documents/   <span class="co"># move</span></span></code></pre></div>
+<p><strong>Important consideration:</strong> <code>mv</code> does not
+make a copy; it <em>removes the original</em>. If the destination
+already has a file with the same name, it may be overwritten without
+warning.</p>
+<h3 id="rm-remove-files-or-directories">8. <code>rm</code>: remove files
+or directories</h3>
+<p>Deletes files or folders.</p>
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span></code></pre></div>
+<p>Common useful options:</p>
+<ul>
+<li><code>-r</code> (recursive): removes a directory and everything in
+it, including sub-folders</li>
+<li><code>-i</code> (interactive): asks for confirmation before deleting
+each file</li>
+</ul>
+<p><strong>Critical warning:</strong> deleted files are not sent to a
+recycle bin. They are usually gone for good. Use <code>rm -r</code> with
+extreme caution, especially around important data or project
+directories.</p>
+<h2 id="viewing-and-searching-file-contents">Viewing and searching file
+contents</h2>
+<h3 id="cat-display-and-concatenate">9. <code>cat</code>: display and
+concatenate</h3>
+<p>Shows the contents of a file, or joins several files together.</p>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="pp">[</span><span class="ss">file_1</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">file_2</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">file_3</span><span class="pp">]</span></span></code></pre></div>
+<h3 id="grep-search-for-text">10. <code>grep</code>: search for
+text</h3>
+<p>Searches for a pattern or text in files or command output.</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> <span class="st">&quot;pattern&quot;</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span></code></pre></div>
+<p>Common useful options:</p>
+<ul>
+<li><code>-c</code>: counts matching lines (not individual
+occurrences)</li>
+<li><code>-i</code>: case-insensitive search</li>
+<li><code>-r</code> (recursive): searches all files in a folder and its
+sub-folders</li>
+</ul>
+<p>In bioinformatics, <code>grep</code> is commonly used for counting
+sequences and finding motifs:</p>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">&quot;&gt;&quot;</span> sequences.fasta        <span class="co"># count the sequences in a FASTA file</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">&quot;ATCTGACC&quot;</span> sample.fastq       <span class="co"># find reads containing a motif</span></span></code></pre></div>
+<h3 id="head-and-tail-view-the-top-and-bottom-of-a-file">11.
+<code>head</code> and <code>tail</code>: view the top and bottom of a
+file</h3>
+<p><code>head</code> and <code>tail</code> are quick sanity checks when
+working with big files. By default they show the first and last 10
+lines, and they work on multiple files.</p>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 20 sample_file             <span class="co"># show the first 20 lines</span></span></code></pre></div>
+<h3 id="less-page-by-page-viewer">12. <code>less</code>: page-by-page
+viewer</h3>
+<p>Like <code>head</code> and <code>tail</code>, <code>less</code>
+previews large files. It opens one page at a time and lets you scroll
+forward and backward.</p>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">file_name</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Navigation shortcuts:</strong> space for the next page,
+<code>b</code> for the previous page, and <code>q</code> to quit.</p>
+<h2 id="glossary">Glossary</h2>
+<ul>
+<li><strong>Directory / sub-directory:</strong> the technical terms for
+what most people call “folders”. A directory is a location where files
+are stored, and a sub-directory is a directory inside another one.</li>
+<li><strong>Folder / sub-folder:</strong> the graphical terms for
+directories. In the terminal, “folder” and “directory” mean exactly the
+same thing.</li>
+</ul>
+<p><strong>Directory separator.</strong> Linux and macOS use the forward
+slash (<code>/</code>) to separate folder names in a path, or a folder
+from a file.</p>
+<ul>
+<li><strong>The root directory:</strong> a single <code>/</code> at the
+very start of a path is the top-level directory of the entire
+system.</li>
+<li><strong>Defining paths:</strong> in
+<code>project/raw_data/sample.fastq</code>, the slashes tell Linux that
+<code>sample.fastq</code> is inside <code>raw_data</code>, which is
+inside <code>project</code>.</li>
+<li><strong>Windows</strong> traditionally uses the backslash
+(<code>\</code>) instead.</li>
+</ul>
+<p><strong>Tip:</strong> in the terminal, always use the forward slash.
+Linux treats a backslash as an “escape character” (telling the system to
+ignore the special meaning of the next character), so a backslash in a
+path will make your command fail.</p>
+<p><strong>Absolute vs. relative paths</strong></p>
+<ul>
+<li><strong>Absolute path:</strong> the full address of a file or
+folder. It always starts from the root (<code>/</code>) and works no
+matter where you are in the terminal. Example:
+<code>/home/user/project/data.txt</code></li>
+<li><strong>Relative path:</strong> a shortcut based on your current
+location (<code>pwd</code>). If you are already in the
+<code>project</code> folder, the relative path to your file is just
+<code>data.txt</code>.</li>
+</ul>
 <h1 id="git-essentials">Git Essentials</h1>
 <p><em>The Git daily loop for scientific and data work, status, diff,
 commit, branch, and safe undo, without drowning in advanced history
