@@ -12,6 +12,24 @@ UNIX command-line tools remain the fastest way to inspect files, glue workflows 
 
 This primer focuses on commands I reach for constantly when exploring sequencing outputs, logs, and tabular intermediates.
 
+## Understanding the command line from scratch
+
+The command line is a text interface to your computer. It lets you interact with your computer using text-based commands. It works on macOS, Windows, and Linux, and gives you speed, efficiency, and access to advanced tools that graphical interfaces cannot provide.
+
+Bioinformaticians don't _have_ to start with the command line, but in practice it quickly becomes essential because most real biological data analysis is built around tools that assume you can use it. Here's why it matters.
+
+**First, scale.** Bioinformatics deals with large datasets like whole genomes, RNA-seq reads, or metagenomic samples. These files are often too big for graphical tools to handle efficiently. The command line lets you process them directly on servers or high-performance computing (HPC) systems without loading everything into memory-heavy interfaces.
+
+**Second, reproducibility.** Command-line workflows are scriptable, which means you can record every step of an analysis exactly. That's a big deal in science because it allows others (or your future self) to reproduce results. Instead of clicking through menus, you can run a pipeline with a script and get the same output every time.
+
+**Third, automation.** Bioinformatics often involves repeating similar steps across hundreds or thousands of samples: quality control, alignment, variant calling, and so on. With command-line tools and scripting (bash, Python), you can automate this instead of doing it manually, saving huge amounts of time and reducing errors.
+
+**Fourth, tool availability.** Most widely used bioinformatics software (e.g. FastQC, BWA, SAMtools, Bowtie2, GATK) is designed primarily for the command line. Even when a GUI exists, the full functionality is usually in the terminal version.
+
+**Fifth, working on remote systems.** A lot of real bioinformatics work is done on cloud servers or HPC clusters. You typically access these through SSH, which is entirely command-line based. Without it, you simply can't run many large-scale analyses.
+
+**Finally, flexibility and control.** The command line allows you to combine tools in powerful ways using pipes, filters, and scripts. You can build custom pipelines tailored to your research question rather than relying on fixed GUI workflows.
+
 ## Moving around and seeing what is there
 
 ```

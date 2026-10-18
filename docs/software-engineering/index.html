@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Musfira Jamil" />
-  <meta name="dcterms.date" content="2026-09-27" />
+  <meta name="dcterms.date" content="2026-10-18" />
   <title>Software Engineering for Bioinformatics</title>
   <style>
     code{white-space: pre-wrap;}
@@ -32,7 +32,7 @@
 <p class="subtitle">Engineering habits for trustworthy scientific
 software</p>
 <p class="author">Musfira Jamil</p>
-<p class="date">2026-09-27</p>
+<p class="date">2026-10-18</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
@@ -90,6 +90,9 @@ practical baseline</a></li>
 <li><a href="#common-unix-commands" id="toc-common-unix-commands">Common
 UNIX Commands</a>
 <ul>
+<li><a href="#understanding-the-command-line-from-scratch"
+id="toc-understanding-the-command-line-from-scratch">Understanding the
+command line from scratch</a></li>
 <li><a href="#moving-around-and-seeing-what-is-there"
 id="toc-moving-around-and-seeing-what-is-there">Moving around and seeing
 what is there</a></li>
@@ -388,6 +391,45 @@ opening a GUI. You do not need to memorise everything, a compact toolkit
 covers most day-to-day work for analysts and data engineers.</p>
 <p>This primer focuses on commands I reach for constantly when exploring
 sequencing outputs, logs, and tabular intermediates.</p>
+<h2 id="understanding-the-command-line-from-scratch">Understanding the
+command line from scratch</h2>
+<p>The command line is a text interface to your computer. It lets you
+interact with your computer using text-based commands. It works on
+macOS, Windows, and Linux, and gives you speed, efficiency, and access
+to advanced tools that graphical interfaces cannot provide.</p>
+<p>Bioinformaticians don’t <em>have</em> to start with the command line,
+but in practice it quickly becomes essential because most real
+biological data analysis is built around tools that assume you can use
+it. Here’s why it matters.</p>
+<p><strong>First, scale.</strong> Bioinformatics deals with large
+datasets like whole genomes, RNA-seq reads, or metagenomic samples.
+These files are often too big for graphical tools to handle efficiently.
+The command line lets you process them directly on servers or
+high-performance computing (HPC) systems without loading everything into
+memory-heavy interfaces.</p>
+<p><strong>Second, reproducibility.</strong> Command-line workflows are
+scriptable, which means you can record every step of an analysis
+exactly. That’s a big deal in science because it allows others (or your
+future self) to reproduce results. Instead of clicking through menus,
+you can run a pipeline with a script and get the same output every
+time.</p>
+<p><strong>Third, automation.</strong> Bioinformatics often involves
+repeating similar steps across hundreds or thousands of samples: quality
+control, alignment, variant calling, and so on. With command-line tools
+and scripting (bash, Python), you can automate this instead of doing it
+manually, saving huge amounts of time and reducing errors.</p>
+<p><strong>Fourth, tool availability.</strong> Most widely used
+bioinformatics software (e.g. FastQC, BWA, SAMtools, Bowtie2, GATK) is
+designed primarily for the command line. Even when a GUI exists, the
+full functionality is usually in the terminal version.</p>
+<p><strong>Fifth, working on remote systems.</strong> A lot of real
+bioinformatics work is done on cloud servers or HPC clusters. You
+typically access these through SSH, which is entirely command-line
+based. Without it, you simply can’t run many large-scale analyses.</p>
+<p><strong>Finally, flexibility and control.</strong> The command line
+allows you to combine tools in powerful ways using pipes, filters, and
+scripts. You can build custom pipelines tailored to your research
+question rather than relying on fixed GUI workflows.</p>
 <h2 id="moving-around-and-seeing-what-is-there">Moving around and seeing
 what is there</h2>
 <pre><code>pwd
